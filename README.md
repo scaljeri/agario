@@ -10,13 +10,13 @@ which is equivalent to
     
 ## Run tests
 
-To run the tests do
+To run the tests 
 
-    $> ./node_modules/.bin/mocha --compilers js:babel-core/register --harmony
+    $> npm test
     
 which is equivalent to
 
-    $> npm test
+    $> ./node_modules/.bin/mocha --compilers js:babel-core/register --harmony
     
 This command uses the `.babelrc` file in order to compile ES2015
 
