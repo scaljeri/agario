@@ -22,8 +22,8 @@ This command uses the `.babelrc` file in order to compile ES2015
 
 ## Facebook
 
-To automatically login into facebook create a file called `credentails.txt` which should have the 
-following format/JSON
+To automatically login with your facebook account create a file called `credentails.txt` which should contain
+your credentials in JSON format
 
     {
         "username": "my-name@facebook.com",

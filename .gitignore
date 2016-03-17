@@ -1,4 +1,5 @@
 .idea/
+docs/
 node_modules
 bundle.js
-credentials.txt
+facebook.json

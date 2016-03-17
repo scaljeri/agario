@@ -10,10 +10,22 @@ function loadCredentials() {
     });
 }
 
+/**
+ * This class uses webdriver to login into agario using Facebook. Although you can initiate
+ * an instance providing the credentials you can also create a file called `facebook.json`
+ */
 export default class Facebook {
     static get LOGIN_CLS() {
         return '.btn-login-play';
     }
+
+    /**
+     * @param {Object} browser - this object is part from Webdriver
+     * @param {Object} webdriver - this is the webdriver object
+     * @param {Object=} credentials - Object holding facebook credentials
+     * @param {String} credentails.username - Facebook username
+     * @param {String} credentails.password - Facebook password
+     */
     constructor(browser, webdriver, credentials) {
         this.browser = browser;
         this.webdriver = webdriver;
