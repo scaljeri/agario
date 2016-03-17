@@ -1,43 +1,49 @@
 {
-    "name": "agario",
-    "version": "1.0.0",
-    "description": "$> ../node_modules/.bin/mocha --compilers js:babel-core/register --harmony",
-    "main": "index.js",
-    "directories": {
-        "test": "test"
-    },
-    "scripts": {
-        "test": "./node_modules/.bin/mocha --compilers js:babel-core/register --harmony",
-        "bundle": "./node_modules/.bin/browserify -t [ babelify --presets [ es2015 ] ] src/index.js -o bundle.js",
-        "watch": "./node_modules/.bin.watchify -t [ babelify --presets [ es2015 ] ] src/index.js -o bundle.js",
-        "start": "./node_modules/.bin/browser-sync start --server --files bundle.js",
-        "docs": "./node_modules/.bin/esdoc -c esdoc.json"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/scaljeri/agario.git"
-    },
-    "author": "",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/scaljeri/agario/issues"
-    },
-    "homepage": "https://github.com/scaljeri/agario#readme",
-    "devDependencies": {
-        "babel": "^6.5.2",
-        "babel-core": "^6.7.2",
-        "babel-preset-es2015": "^6.6.0",
-        "babelify": "^7.2.0",
-        "browser-sync": "^2.11.1",
-        "browserify": "^13.0.0",
-        "chai": "^3.5.0",
-        "chai-spies": "^0.7.1",
-        "esdoc": "^0.4.6",
-        "mocha": "^2.4.5",
-        "mocktail": "^0.3.8",
-        "numeric": "^1.2.6",
-        "promise": "^7.1.1",
-        "victor": "^1.1.0",
-        "watchify": "^3.7.0"
-    }
+  "name": "agario",
+  "version": "1.0.0",
+  "description": "$> ../node_modules/.bin/mocha --compilers js:babel-core/register --harmony",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha",
+    "test-es5": "./node_modules/.bin/mocha -- --compilers js:babel-core/register --harmony",
+    "bundle": "./node_modules/.bin/browserify -t [ babelify --presets [ es2015 ] ] src/index.js -o bundle.js",
+    "watch": "./node_modules/.bin.watchify -t [ babelify --presets [ es2015 ] ] src/index.js -o bundle.js",
+    "start": "./node_modules/.bin/browser-sync start --server --files bundle.js",
+    "docs": "./node_modules/.bin/esdoc -c esdoc.json && open docs/esdoc/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scaljeri/agario.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/scaljeri/agario/issues"
+  },
+  "homepage": "https://github.com/scaljeri/agario#readme",
+  "devDependencies": {
+    "babel-cli": "^6.6.5",
+    "babel-core": "^6.7.2",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "babelify": "^7.2.0",
+    "browser-sync": "^2.11.1",
+    "browserify": "^13.0.0",
+    "chai": "^3.5.0",
+    "chai-as-promised": "^5.2.0",
+    "chai-spies": "^0.7.1",
+    "esdoc": "^0.4.6",
+    "isparta": "^4.0.0",
+    "istanbul": "^0.4.2",
+    "mocha": "^2.4.5",
+    "mocktail": "^0.3.8",
+    "numeric": "^1.2.6",
+    "promise": "^7.1.1",
+    "using-stubs": "0.0.6",
+    "victor": "^1.1.0",
+    "watchify": "^3.7.0"
+  }
 }

@@ -33,7 +33,7 @@ class Webdriver {
         return this._by;
     }
     resolve(el) {}
-    reject() {}
+    reject(err) {}
 }
 
 class Browser {
