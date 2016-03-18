@@ -1,25 +1,27 @@
 const SETTINGS_CLS = '.btn-settings';
 
 export default class Agario {
-    constructor() {
+    constructor(browser, webdriver) {
+        this.browser = browser;
+        this.webdriver = webdriver;
     }
 
     setup() {
-        return browser.findElement(webdriver.By.css(SETTINGS_CLS))
+        return this.browser.findElement(this.webdriver.By.css(SETTINGS_CLS))
             .then((element) => {
                 return element.click()
-                    .then(clickCheckbox.bind(null, 'noSkins', true))
-                    .then(clickCheckbox.bind(null, 'noColors', true))
-                    .then(clickCheckbox.bind(null, 'darkTheme', true))
-                    .then(clickCheckbox.bind(null, 'noNames', true))
-                    .then(clickCheckbox.bind(null, 'showMass', false))
-                    .then(clickCheckbox.bind(null, 'skipStats', true))
+                    .then(::this.clickCheckbox('noSkins', true))
+                    .then(::this.clickCheckbox('noColors', true))
+                    .then(::this.clickCheckbox('darkTheme', true))
+                    .then(::this.clickCheckbox('noNames', true))
+                    .then(::this.clickCheckbox('showMass', false))
+                    .then(::this.clickCheckbox('skipStats', true))
             });
     }
 
     clickCheckbox(id, toState) {
         return new Promise((resolve, reject) => {
-            browser.findElement(webdriver.By.id(id))
+            this.browser.findElement(this.webdriver.By.id(id))
                 .then((element) => {
                     element.click().then(() => {
                         element.getAttribute("checked")
