@@ -27,6 +27,8 @@ class Bot {
         this.settings = {};
         this.parseArgvs('facebook');
 
+        this.agario = new Agario();
+
         this.browser = new webdriver.Builder().usingServer().withCapabilities({
             'browserName': 'chrome',
             'reuse_browser': true
@@ -48,12 +50,17 @@ class Bot {
     setup() {
         if (this.settings.facebook) {
             Facebook.login(browser, webdriver)
-                .then(function () {
-                    agarioSetup().then(function () {
+                .then(() => {
+                    this.agario.setup().then(() => {
                         browser.manage().window().setSize(WIDTH, HEIGHT)
                             .then(play);
                     })
                 });
+        } else {
+            agario.then(() => {
+                browser.manage().window().setSize(WIDTH, HEIGHT)
+                    .then(play);
+            })
         }
     }
 
