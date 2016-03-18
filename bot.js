@@ -19,8 +19,9 @@ class Bot {
 
         this.browser = new webdriver.Builder().usingServer().withCapabilities({
             'browserName': 'chrome',
-            'reuse_browser': true
+            'reuse_browser': false
         }).build();
+
         this.page = new Page(webdriver, this.browser, {
             isGuest: !this.settings.facebook
         });
@@ -58,10 +59,20 @@ class Bot {
     }
 
     play() {
-        this.agario.play().then(() => {
-            //this.browser.close();
-        });
-        // Everything is ready, lets play
+        this.page.isSettingsVisible()
+            .then(() => {
+                if (!this.hasPlayed) {
+                    this.hasPlayed = true;
+                    //this.agario.play();
+                    //this.monitorGameOver();
+                }
+            });
+    }
+
+    monitorGameOver() {
+        this.page.isSettingsVisible()
+            .then(::this.browser.close,
+                  ::this.monitorGameOver)
     }
 }
 
