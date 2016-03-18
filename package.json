@@ -37,11 +37,11 @@
     "chai-spies": "^0.7.1",
     "esdoc": "^0.4.6",
     "isparta": "^4.0.0",
-    "istanbul": "^0.4.2",
     "mocha": "^2.4.5",
     "mocktail": "^0.3.8",
     "numeric": "^1.2.6",
     "promise": "^7.1.1",
+    "selenium-webdriver": "^2.53.1",
     "using-stubs": "0.0.6",
     "victor": "^1.1.0",
     "watchify": "^3.7.0"

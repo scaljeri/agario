@@ -39,3 +39,5 @@ credentials in a file called `facebook.json`. Example file:
         "username": "my-name@facebook.com",
         "password": "my-password"
     }
+    
+docker run --rm -it --net my-network -v  /Users/lucas/WebstormProjects/agario:/home/dev/workspace --net=my-network --name n5ia n5i
