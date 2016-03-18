@@ -1,4 +1,6 @@
 import fs from 'fs';
+import ndarray from 'ndarray';
+import savePixels from 'save-pixels';
 
 const SETTINGS_CLS = '.btn-settings';
 
@@ -22,9 +24,21 @@ export default class Agario {
 
     play() {
         this.page.start().then(() => {
-            this.page.getMouseCoords().then((coords) => {
-                this.page.moveMouse(coords);
-            })
+            /*
+             this.page.getMouseCoords().then((coords) => {
+             this.page.moveMouse(coords);
+             })
+             */
+
+            setTimeout(() => {
+                this.page.getPixelArray().then((pixels) => {
+
+                    let nda = ndarray(pixels.data, pixels.shape, pixels.stride, pixels.offset);
+
+                    let myFile = fs.createWriteStream("n.png");
+                    let image = savePixels(nda, "png").pipe(myFile);
+                });
+            }, 1000);
         });
     }
 }

@@ -102,6 +102,10 @@ export default class Page {
         return this.browser.executeScript('return bot.analyse()');
     }
 
+    getPixelArray() {
+        return this.browser.executeScript('return bot.getPixels()');
+    }
+
     moveMouse(coords) {
         this.browser.findElement(this.webdriver.By.css(CANVAS))
             .then((canvas) => {
