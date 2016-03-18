@@ -1,3 +1,5 @@
+#!./node_modules/.bin/babel-node
+
 import webdriver from 'selenium-webdriver';
 import Facebook from './src/game/facebook';
 import Promise from 'promise';
@@ -7,7 +9,8 @@ let browser = new webdriver.Builder().usingServer().withCapabilities({
     'reuse_browser': true
 }).build();
 
-const WIDTH = HEIGHT = 100;
+const WIDTH = 100,
+     HEIGHT = 100;
 
 let [useFacebook] = checkArgv('facebook');
 
