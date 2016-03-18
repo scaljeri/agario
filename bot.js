@@ -13,7 +13,7 @@ const WIDTH = 100,
 class Bot {
     constructor() {
         this.settings = {};
-        this.parseArgvs('facebook');
+        this.parseArgvs();
 
 
         this.browser = new webdriver.Builder().usingServer().withCapabilities({
@@ -22,7 +22,6 @@ class Bot {
         }).build();
 
         this.agario = new Agario(this.browser, webdriver);
-        this.facebook = new Facebook(this.browser, webdriver);
         this.browser.get('http://agar.io').then(::this.setup);
     }
 
@@ -38,6 +37,7 @@ class Bot {
 
     setup() {
         if (this.settings.facebook) {
+            this.facebook = new Facebook(this.browser, webdriver);
             this.facebook.login(this.browser, webdriver)
                 .then(() => {
                     this.agario.setup().then(() => {
@@ -47,8 +47,8 @@ class Bot {
                 });
         } else {
             this.agario.setup().then(() => {
-                browser.manage().window().setSize(WIDTH, HEIGHT)
-                    .then(play);
+                this.browser.manage().window().setSize(WIDTH, HEIGHT)
+                    .then(::this.play);
             })
         }
     }
