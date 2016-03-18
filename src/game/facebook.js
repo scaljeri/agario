@@ -6,7 +6,13 @@ import fs from 'fs';
  * an instance providing the credentials you can also create a file called `facebook.json`
  */
 export default class Facebook {
-    static get LOGIN_CLS() { return '.btn-login-play'; }
+    static get LOGIN_CLS() {
+        return '.btn-login-play';
+    }
+
+    static get BTN_FACEBOOK() {
+        return '.btn-fb';
+    }
 
     /**
      * @param {Object} browser - this object is part from Webdriver
@@ -44,9 +50,9 @@ export default class Facebook {
      */
     login() {
         return this.gotoLogin() // Make sure we can login
-            .then(activateFacebookLogin, reject)
-            .then(enterCredentials)
-            .then(submitForm)
+            .then(::this.activateFacebookLogin)
+            .then(::this.enterCredentials)
+            .then(::this.submitForm)
     }
 
     /**
@@ -54,23 +60,30 @@ export default class Facebook {
      * @returns {Promise}
      */
     gotoLogin() {
-        return this.browser.findElement(this.webdriver.By.css(Facebook.LOGIN_CLS))
-            .then((element) => {
-                element.getSize().then((size) => {
-                    if (size.height > 0) {
-                        this.webdriver.resolve(element);
-                    } else {
-                        this.webdriver.reject();
-                    }
-                })
-            });
+        return new Promise((resolve, reject) => {
+            this.browser.findElement(this.webdriver.By.css(Facebook.LOGIN_CLS))
+                .then((element) => {
+                    element.getSize().then((size) => {
+                        if (size.height > 0) {
+                            resolve(element);
+                        } else {
+                            reject();
+                        }
+                    })
+                });
+        });
     }
 
     /**
      * On the login section, select Facebook
      */
     activateFacebookLogin() {
-
+        return this.browser.findElement(this.webdriver.By.css(Facebook.BTN_FACEBOOK)).click()
+            .then(browser.getAllWindowHandles().then((handles) => {
+                browser.switchTo().window(handles[1]).then(() => {
+                    resolve(handles[0]);
+                });
+            }));
     }
 
     /**

@@ -3,11 +3,12 @@
 import webdriver from 'selenium-webdriver';
 import Promise from 'promise';
 
+import Page from './src/game/page';
 import Facebook from './src/game/facebook';
 import Agario from './src/game/agario';
 
-const WIDTH = 100,
-    HEIGHT = 100,
+const WIDTH = 700,
+    HEIGHT = 700,
     ARGVS = ['facebook'];
 
 class Bot {
@@ -20,8 +21,11 @@ class Bot {
             'browserName': 'chrome',
             'reuse_browser': true
         }).build();
+        this.page = new Page(webdriver, this.browser, {
+            isGuest: !this.settings.facebook
+        });
 
-        this.agario = new Agario(this.browser, webdriver);
+        this.agario = new Agario(this.page);
         this.browser.get('http://agar.io').then(::this.setup);
     }
 
@@ -54,8 +58,10 @@ class Bot {
     }
 
     play() {
+        this.agario.play().then(() => {
+            //this.browser.close();
+        });
         // Everything is ready, lets play
-        //this.browser.close():
     }
 }
 
