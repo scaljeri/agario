@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 const SETTINGS_CLS = '.btn-settings';
 
 export default class Agario {
@@ -19,9 +21,10 @@ export default class Agario {
     }
 
     play() {
-        return this.page.start()
-            .then(() => {
-
-            });
+        this.page.start().then(() => {
+            this.page.getMouseCoords().then((coords) => {
+                this.page.moveMouse(coords);
+            })
+        });
     }
 }

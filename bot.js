@@ -47,12 +47,14 @@ class Bot {
                 .then(() => {
                     this.agario.setup().then(() => {
                         this.browser.manage().window().setSize(WIDTH, HEIGHT)
-                            .then(play);
+                            .then(::this.page.injectJS)
+                            .then(::this.play)
                     })
                 });
         } else {
             this.agario.setup().then(() => {
                 this.browser.manage().window().setSize(WIDTH, HEIGHT)
+                    .then(::this.page.injectJS)
                     .then(::this.play);
             })
         }
@@ -61,18 +63,15 @@ class Bot {
     play() {
         this.page.isSettingsVisible()
             .then(() => {
-                if (!this.hasPlayed) {
-                    this.hasPlayed = true;
-                    this.agario.play();
-                    this.monitorGameOver();
-                }
+                this.agario.play();
+                this.monitorGameOver();
             });
     }
 
     monitorGameOver() {
         this.page.isSettingsVisible()
             .then(::this.browser.close,
-                  ::this.monitorGameOver)
+                ::this.monitorGameOver)
     }
 }
 

@@ -1,12 +1,16 @@
+import fs from 'fs';
+
 const BTN_FB = '.btn-play',
-      BTN_GUEST = '.btn-play-guest',
-      BTN_SETTINGS = '.btn-settings';
+    BTN_GUEST = '.btn-play-guest',
+    BTN_SETTINGS = '.btn-settings',
+    CANVAS = '#canvas';
 
 export default class Page {
     constructor(webdriver, browser, options) {
         this.webdriver = webdriver;
         this.browser = browser;
         this.options = options;
+        this.as = new webdriver.ActionSequence(browser);
     }
 
     isSettingsVisible() {
@@ -83,5 +87,25 @@ export default class Page {
             });
     }
 
+    injectJS(js) {
+        return new Promise((resolve, reject) => {
+            fs.readFile('./bundle.js', 'utf8', (err, js) => {
+                if (err) {
+                    reject(err);
+                }
+                this.browser.executeScript(js).then(resolve);
+            });
+        });
+    }
 
+    getMouseCoords() {
+        return this.browser.executeScript('return bot.analyse()');
+    }
+
+    moveMouse(coords) {
+        this.browser.findElement(this.webdriver.By.css(CANVAS))
+            .then((canvas) => {
+                this.as.mouseMove(canvas, coords).click().perform();
+            });
+    }
 }

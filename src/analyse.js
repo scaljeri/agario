@@ -1,5 +1,7 @@
 import Circle from './image/circle';
 
-window.analyse = function () {
+window.bot = {
+    analyse: function () {
 
+    }
 };
