@@ -18,7 +18,7 @@ function checkArgv(...options) {
    let index, output = [];
 
    process.argv.forEach((arg) => {
-        if ( (index = options.indexOf(arg)) >= 0) {
+        if ( (index = options.indexOf(arg.replace(/-/g, ''))) >= 0) {
             output[index] = true;
         }
    }) ;
