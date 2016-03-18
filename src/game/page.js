@@ -49,41 +49,25 @@ export default class Page {
         return this.setCheckbox('skipStats', state);
     }
 
-    setCheckbox(id, state, isFirst = true) {
-        //return new Promise((resolve, reject) => {
-        if (isFirst) {
-            return this.browser.findElement(this.webdriver.By.id(id)).click()
-                .then(() => {
-                    return this.setCheckbox(id, state, false);
-                });
-        } else {
-            return this.browser.findElement(this.webdriver.By.id(id))
+    setCheckbox(id, state) {
+        return new Promise((resolve, reject) => {
+            this.browser.findElement(this.webdriver.By.id(id))
                 .then((element) => {
-                    if (isFirst) {
-                        return element.click().then(::this.setCheckbox(id, state, false));
-                    } else {
+                    element.click().then(() => {
                         element.getAttribute("checked")
-                        //element.isSelected()
-                            .then((selected) => {
-                                console.log("SEL=" + selected);
-                                console.log("SEL=" + state);
-                                if (selected === state) {
-                                    console.log('x');
-                                    this.webdriver.promise.when();
+                            .then((value) => {
+                                if (!!value !== state) {
+                                    element.click().then(resolve);
                                 } else {
-                                    console.log('y');
-                                    element.click().then(() => {
-                                        this.webdriver.promise.when();
-                                    });
+                                    resolve();
                                 }
                             });
-                    }
+                    })
                 });
-        }
+        });
     }
 
     start() {
-        console.log(this.options.isGuest ? BTN_GUEST : BTN_FB);
         return this.browser.findElement(this.webdriver.By.css(this.options.isGuest ? BTN_GUEST : BTN_FB))
             .then((element) => {
                 element.isDisplayed().then((state) => {

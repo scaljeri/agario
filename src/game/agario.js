@@ -9,12 +9,12 @@ export default class Agario {
         return this.page.getByCls(SETTINGS_CLS)
             .then((element) => {
                 return element.click()
-                    .then(::this.page.setSkins)
-                    //.then(::this.page.setColors)
-                    //.then(::this.page.setTheme)
-                    //.then(::this.page.setNames)
-                    //.then(::this.page.setMass)
-                    //.then(::this.page.setStats)
+                    .then(::this.page.setSkins())
+                    .then(::this.page.setColors())
+                    .then(::this.page.setTheme())
+                    .then(::this.page.setNames())
+                    .then(::this.page.setMass())
+                    .then(::this.page.setStats())
             });
     }
 

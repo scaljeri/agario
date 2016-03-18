@@ -63,8 +63,8 @@ class Bot {
             .then(() => {
                 if (!this.hasPlayed) {
                     this.hasPlayed = true;
-                    //this.agario.play();
-                    //this.monitorGameOver();
+                    this.agario.play();
+                    this.monitorGameOver();
                 }
             });
     }
