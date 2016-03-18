@@ -1,4 +1,4 @@
-import circle from './src/image/circle';
+import Victor from 'victor';
 
 export default class {
     constructor(center, radius, size, type) {
@@ -8,7 +8,7 @@ export default class {
         this.type = type;
     }
 
-    isInside(point) {
-        return this.center.distance(point) < this.radius;
+    isInside(x, y) {
+        return this.center.distance(new Victor(x, y)) < this.radius;
     }
 }

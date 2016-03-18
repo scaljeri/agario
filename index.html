@@ -1,16 +1,50 @@
 <!doctype html>
 
 <html>
-    <head>	
-	<link rel="stylesheet" href="main.css">
-        <style>
-        </style>
-        <script>
-        </script>
     <head>
+        <style>
+            img {
+                width: 300px;
+                height: 300px;
+            }
+        </style>
+        <script src="https://code.jquery.com/jquery-2.2.2.min.js" integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI=" crossorigin="anonymous"></script>
+
+        <head>
 
     <body>
-        <h1>Hello</h1>
+        <h1>Hello world</h1>
+        <!--<img src="screens/1.png">-->
+
+        <canvas id="canvas" width="500" height="400"></canvas>
         <script src="bundle.js"></script>
+
+        <script>
+            var image = new Image();
+            image.src = 'screens/1.png';
+            image.onload = function (e) {
+                var ctx = $('#canvas')[0].getContext('2d');
+                ctx.drawImage(image, 0, 0, 500, 400);
+
+                var nda = window.bot.getPixels();
+
+                var id = ctx.createImageData(1,1);
+
+
+                for( var x = 0; x < nda.shape[0]; x++) {
+                    for (var y = 0; y < nda.shape[1]; y++) {
+                        idx = (nda.shape[0] * y + x) << 2;
+
+                        id.data[0] = nda.data[idx];
+                        id.data[1] = nda.data[idx + 1];
+                        id.data[2] = nda.data[idx + 2];
+                        id.data[3] = 255;
+                        //ctx.putImageData([nda.data[idx], nda.data[idx+1], nda.data[idx+2], 255], x, y);
+                        ctx.putImageData(id, x, y);
+                    }
+                }
+            };
+
+        </script>
     </body>
 <html>

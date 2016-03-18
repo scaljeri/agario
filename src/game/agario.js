@@ -24,14 +24,22 @@ export default class Agario {
 
     play() {
         this.page.start().then(() => {
-            /*
              this.page.getMouseCoords().then((coords) => {
              this.page.moveMouse(coords);
-             })
-             */
+             });
 
+            /*
             setTimeout(() => {
+                /*
                 this.page.getPixelArray().then((pixels) => {
+                    pixels.data = pixels.data.reduce((l, v) => {
+                        l.push(v);
+                        l.push(v);
+                        l.push(v);
+                        l.push(255);
+
+                        return l;
+                    }, []);
 
                     let nda = ndarray(pixels.data, pixels.shape, pixels.stride, pixels.offset);
 
@@ -39,6 +47,7 @@ export default class Agario {
                     let image = savePixels(nda, "png").pipe(myFile);
                 });
             }, 1000);
+            */
         });
     }
 }
