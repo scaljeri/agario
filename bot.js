@@ -9,7 +9,11 @@ import Agario from './src/game/agario';
 
 const WIDTH = 700,
     HEIGHT = 700,
-    ARGVS = ['facebook', 'snapshots'];
+    ARGVS = ['facebook', 'snapshots', 'loop'],
+    ARGVS_DEFAULT = {
+        snapshots: './snapshots',
+        loop: 10
+    };
 
 class Bot {
     constructor() {
@@ -36,7 +40,7 @@ class Bot {
             let option = arg.replace(/-/g, '').split('=');
 
             if ((index = ARGVS.indexOf(option[0])) >= 0) {
-                this.settings[ARGVS[index]] = option[1] || true;
+                this.settings[ARGVS[index]] = option[1] || ARGVS_DEFAULT[ARGVS[index]] || true;
             }
         });
     }
