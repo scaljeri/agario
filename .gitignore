@@ -1,6 +1,7 @@
 .idea/
 docs/
 coverage/
+snapshots/
 node_modules
 bundle.js
 facebook.json
