@@ -9,7 +9,7 @@ import Agario from './src/game/agario';
 
 const WIDTH = 700,
     HEIGHT = 700,
-    ARGVS = ['facebook'];
+    ARGVS = ['facebook', 'snapshot'];
 
 class Bot {
     constructor() {
@@ -41,23 +41,21 @@ class Bot {
     }
 
     setup() {
-        if (this.settings.facebook) {
-            this.facebook = new Facebook(this.browser, webdriver);
-            this.facebook.login(this.browser, webdriver)
-                .then(() => {
-                    this.agario.setup().then(() => {
-                        this.browser.manage().window().setSize(WIDTH, HEIGHT)
-                            .then(::this.page.injectJS)
-                            .then(::this.play)
-                    })
-                });
-        } else {
-            this.agario.setup().then(() => {
-                this.browser.manage().window().setSize(WIDTH, HEIGHT)
-                    .then(::this.page.injectJS)
-                    .then(::this.play);
+        return new Promise((resolve) => {
+            if (this.settings.facebook) {
+                this.facebook = new Facebook(this.page);
+                this.facebook.login()
+                    .then(resolve)
+            } else {
+                resolve();
+            }
+        })
+            .then(::this.agario.setup)
+            .then(() => {
+                return this.browser.manage().window().setSize(WIDTH, HEIGHT)
             })
-        }
+            .then(::this.page.injectJS)
+            .then(::this.play);
     }
 
     play() {
