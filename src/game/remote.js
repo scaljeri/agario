@@ -1,5 +1,7 @@
-window.bot = {
-    takeSnapshot: function () {
+window.bOt = {};
+
+(function (ns) {
+    function getPixels() {
         let canvas = document.querySelector('#canvas'),
             data = canvas.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data;
 
@@ -15,4 +17,16 @@ window.bot = {
             offset: 0
         };
     }
-};
+
+    ns.analyse = function () {
+        // getPixels();
+        // analyse stuff
+        // return coordinates
+
+        return {x: 0, y: 0}
+    };
+
+    ns.takeSnapshot = function () {
+        return getPixels();
+    };
+})(window.bOt);

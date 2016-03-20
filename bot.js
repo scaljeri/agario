@@ -9,13 +9,12 @@ import Agario from './src/game/agario';
 
 const WIDTH = 700,
     HEIGHT = 700,
-    ARGVS = ['facebook', 'snapshot'];
+    ARGVS = ['facebook', 'snapshots'];
 
 class Bot {
     constructor() {
         this.settings = {};
         this.parseArgvs();
-
 
         this.browser = new webdriver.Builder().usingServer().withCapabilities({
             'browserName': 'chrome',
@@ -26,7 +25,7 @@ class Bot {
             isGuest: !this.settings.facebook
         });
 
-        this.agario = new Agario(this.page);
+        this.agario = new Agario(this.page, this.settings.snapshots);
         this.browser.get('http://agar.io').then(::this.setup);
     }
 
@@ -34,8 +33,10 @@ class Bot {
         let index;
 
         process.argv.forEach((arg) => {
-            if ((index = ARGVS.indexOf(arg.replace(/-/g, ''))) >= 0) {
-                this.settings[ARGVS[index]] = true;
+            let option = arg.replace(/-/g, '').split('=');
+
+            if ((index = ARGVS.indexOf(option[0])) >= 0) {
+                this.settings[ARGVS[index]] = option[1] || true;
             }
         });
     }

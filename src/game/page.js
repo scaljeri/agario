@@ -76,16 +76,15 @@ export default class Page {
                 return element.click()
                     .then(() => {
                         return element.getAttribute("checked")
-                            .then((isSelected) => {
-                                if (!!isSelected !== state) { // isSelected is null or 'true'
-                                    return element.click();
-                                } else {
-                                    this.webdriver.promise.when();
-                                }
-                            })
-                    });
+                    })
+                    .then((isSelected) => {
+                        if (!!isSelected !== state) { // isSelected is null or 'true'
+                            return element.click();
+                        } else {
+                            this.webdriver.promise.when();
+                        }
+                    })
             });
-
     }
 
     /**
@@ -175,11 +174,11 @@ export default class Page {
     }
 
     getMouseCoords() {
-        return this.browser.executeScript('return bot.analyse()');
+        return this.browser.executeScript('return bOt.analyse()');
     }
 
-    getSnapshot() {
-        return this.browser.executeScript('return bot.takeSnapshot()');
+    takeSnapshot() {
+        return this.browser.executeScript('return bOt.takeSnapshot()');
     }
 
     moveMouse(coords) {
