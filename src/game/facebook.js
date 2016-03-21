@@ -1,5 +1,6 @@
 import Promise from 'promise';
 import fs from 'fs';
+import Page from './pages/facebook-page';
 
 /**
  * This class uses webdriver to login into agario using Facebook. Although you can initiate
@@ -13,10 +14,10 @@ export default class Facebook {
      * @param {String} credentails.username - Facebook username
      * @param {String} credentails.password - Facebook password
      */
-    constructor(page, credentials) {
-        this.page = page;
+    constructor() {
+        this.page = new Page();
 
-        this.credentials = credentials; // || this.loadCredentials();
+        this.credentials = this.loadCredentials();
     }
 
     loadCredentials() {
@@ -44,7 +45,7 @@ export default class Facebook {
      * @returns {Promise}
      */
     login() {
-        return this.loadCredentials()
+        return this.credentials
             .then((credentials) => {
                 return this.page.fbLogin(credentials);
             })

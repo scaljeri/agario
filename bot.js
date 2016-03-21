@@ -1,81 +1,108 @@
 #!./node_modules/.bin/babel-node
 
-import webdriver from 'selenium-webdriver';
 import Promise from 'promise';
 
-import Page from './src/game/page';
+import MainPage from './src/game/pages/main-page';
+import SettingsPage from './src/game/pages/settings-page';
 import Facebook from './src/game/facebook';
-import Agario from './src/game/agario';
 
 const WIDTH = 700,
     HEIGHT = 700,
-    ARGVS = ['facebook', 'snapshots', 'loop'],
+    ARGVS = ['facebook', 'snapshots', 'fps'],
     ARGVS_DEFAULT = {
         snapshots: './snapshots',
-        loop: 10
+        fps: 10
     };
 
 class Bot {
     constructor() {
-        this.settings = {};
         this.parseArgvs();
 
-        this.browser = new webdriver.Builder().usingServer().withCapabilities({
-            'browserName': 'chrome',
-            'reuse_browser': false
-        }).build();
+        this.page = new MainPage();
+        this.settingsPage = new SettingsPage();
 
-        this.page = new Page(webdriver, this.browser, {
-            isGuest: !this.settings.facebook
-        });
+        this.setup().then(() => {
+                // Lets play!!!
+            })
+            .then(::this.page.close);
 
-        this.agario = new Agario(this.page, this.settings.snapshots);
-        this.browser.get('http://agar.io').then(::this.setup);
+        //this.page = new Page(webdriver, browser, {isGuest: !this.settings.facebook});
+        //this.agario = new Agario(this.page, {snapshotDir: this.settings.snapshots});
+        //
+        //this.page.load().then(::this.setup);
     }
 
     parseArgvs() {
-        let index;
+        this.settings = {};
 
         process.argv.forEach((arg) => {
-            let option = arg.replace(/-/g, '').split('=');
+            let option = arg.replace(/-/g, '').split('='),
+                index = ARGVS.indexOf(option[0]);
 
-            if ((index = ARGVS.indexOf(option[0])) >= 0) {
+            if (index >= 0) {
                 this.settings[ARGVS[index]] = option[1] || ARGVS_DEFAULT[ARGVS[index]] || true;
             }
         });
     }
 
     setup() {
-        return new Promise((resolve) => {
-            if (this.settings.facebook) {
-                this.facebook = new Facebook(this.page);
-                this.facebook.login()
-                    .then(resolve)
-            } else {
-                resolve();
-            }
-        })
-            .then(::this.agario.setup)
+        return this.page.load()
             .then(() => {
-                return this.browser.manage().window().setSize(WIDTH, HEIGHT)
+                if (this.settings.facebook) {
+                    return new Facebook().login();
+                } else {
+                    this.webdriver.promise.when();
+                }
             })
-            .then(::this.page.injectJS)
-            .then(::this.play);
+            .then(::this.settingsPage.checkCheckboxes)
+            .then(::this.settingsPage.lowResolution);
+        //.then(::this.page.injectJS)
+        //.then(::this.begin);
     }
 
-    play() {
-        this.page.isSettingsVisible()
-            .then(() => {
-                this.agario.play();
-                this.monitorGameOver();
-            });
+    begin() {
+        this.counter = 0;
+        Engine.getInstance().start();
     }
 
-    monitorGameOver() {
-        this.page.isSettingsVisible()
-            .then(::this.browser.close,
-                ::this.monitorGameOver)
-    }
+    /*
+     checkState() {
+     console.log('check state');
+     return new Promise((resolve, reject) => {
+     this.counter++;
+
+     if (this.counter > 9) {
+     this.page.isSettingsVisible().then((state) => {
+     if (state === true) {
+     reject();
+     } else {
+     resolve();
+     }
+     })
+     } else {
+     resolve();
+     }
+     });
+     }
+
+     monitorGameOver() {
+     let loopCount = 0;
+
+     console.log('loopin');
+     this.page.isSettingsVisible()
+     .then(() => {
+     console.log('af');
+     if (++loopCount === this.settings.loop) {
+     this.browser.close();
+     } else {
+     this.play(); // Play again
+     }
+     }, () => {
+     console.log('still playiong');
+     this.monitorGameOver();
+     });
+     }
+     */
 }
 
 new Bot();
