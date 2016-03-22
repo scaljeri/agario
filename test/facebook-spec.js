@@ -6,7 +6,8 @@ const CREDENTIALS = {
 import fs from './helpers/fs';
 fs.setup(CREDENTIALS);
 
-import './helpers/setup';
+/*
+//import './helpers/setup';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import spies from 'chai-spies';
@@ -32,10 +33,10 @@ describe('Facebook', () => {
     describe('Credentials', () => {
         describe('Provided', () => {
             beforeEach(() => {
-                facebook = new Facebook(browser, webdriver, CREDENTIALS);
+                facebook = new Facebook();
             });
 
-            it('should use them', () => {
+            it('should load credentials', () => {
                 facebook.credentials.should.equal(CREDENTIALS)
             });
         });
@@ -99,3 +100,4 @@ describe('Facebook', () => {
         });
     });
 });
+*/
