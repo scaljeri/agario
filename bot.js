@@ -51,7 +51,7 @@ class Bot {
                 if (this.settings.facebook) {
                     return new Facebook().login();
                 } else {
-                    this.webdriver.promise.when();
+                    this.page.webdriver.promise.when();
                 }
             })
             .then(::this.settingsPage.checkCheckboxes)
