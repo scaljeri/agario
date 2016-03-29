@@ -1,4 +1,7 @@
 {
-    "source": "./src",
-    "destination": "./docs/esdoc"
+    "source": "./src/shared",
+    "destination": "./docs/esdoc",
+    "plugins": [
+        {"name": "esdoc-es7-plugin"}
+    ]
 }

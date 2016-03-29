@@ -1,3 +1,5 @@
+import Ticker from '../shared/ticker';
+
 window.bOt = {};
 
 (function (ns) {
@@ -29,4 +31,6 @@ window.bOt = {};
     ns.takeSnapshot = function () {
         return getPixels();
     };
+
+    ns.ticker = Ticker.getInstance();
 })(window.bOt);

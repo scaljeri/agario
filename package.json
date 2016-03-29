@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "./node_modules/.bin/babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha",
-    "test-es5": "./node_modules/.bin/mocha -- --compilers js:babel-core/register --harmony",
+    "test-es5": "./node_modules/.bin/mocha --compilers js:babel-core/register --harmony",
     "bundle": "./node_modules/.bin/browserify -t [ babelify --presets [ es2015 ] ] src/game/remote.js -o bundle.js",
     "watch": "./node_modules/.bin.watchify -t [ babelify --presets [ es2015 ] ] src/index.js -o bundle.js",
     "start": "./node_modules/.bin/browser-sync start --server --files bundle.js",
@@ -34,8 +34,8 @@
     "browserify": "^13.0.0",
     "chai": "^3.5.0",
     "chai-as-promised": "^5.2.0",
-    "chai-spies": "^0.7.1",
     "esdoc": "^0.4.6",
+    "esdoc-es7-plugin": "0.0.3",
     "isparta": "^4.0.0",
     "mocha": "^2.4.5",
     "mocktail": "^0.3.8",
@@ -44,8 +44,13 @@
     "promise": "^7.1.1",
     "save-pixels": "^2.3.0",
     "selenium-webdriver": "^2.53.1",
+    "sinon": "^1.17.3",
+    "sinon-chai": "^2.8.0",
     "using-stubs": "0.0.6",
     "victor": "^1.1.0",
     "watchify": "^3.7.0"
+  },
+  "dependencies": {
+    "esdoc-es7-plugin": "0.0.3"
   }
 }
