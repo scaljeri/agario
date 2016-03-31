@@ -11,7 +11,7 @@ const FPS = 10;
  *   - skip frames
  *   - stop the execution chain (tasks with an equal or lower prio can be skipped)
  */
-export default class Ticker {
+export default class Heartbeat {
     constructor(enforcer) {
         if (enforcer !== singletonEnforcer) throw Error('Cannot construct singleton');
 
@@ -21,11 +21,11 @@ export default class Ticker {
     /**
      * Returns the singleton instance
      *
-     * @returns {Ticker}
+     * @returns {Heartbeat}
      */
     static getInstance() {
         if (!singleton) {
-            singleton = new Ticker(singletonEnforcer);
+            singleton = new Heartbeat(singletonEnforcer);
         }
 
         return singleton;
@@ -34,7 +34,7 @@ export default class Ticker {
     /**
      * Reset the instance state
      *
-     * @returns {Ticker}
+     * @returns {Heartbeat}
      */
     reset() {
         fps = FPS;
@@ -79,7 +79,7 @@ export default class Ticker {
      * @param {Number} [options.skip=0] - Number of frames to skip after execution
      * @param {Number} [options.priority=1] - The priority of the callback (influences the order of callback execution)
      *
-     * @returns {Ticker}
+     * @returns {Heartbeat}
      */
     on(key, callback, options = {skip: 0, terminal: false, priority: 1}) {
         if (options.skip === undefined) {
@@ -90,7 +90,11 @@ export default class Ticker {
             options.priority = 1;
         }
 
-        callbacks[key] = {callback, options};
+        if (!callbacks[key]) {
+            callbacks[key] = {callback, options};
+        } else {
+            throw Error(`#on Error: Duplicate key ${key}`);
+        }
 
         return this;
     }
@@ -99,7 +103,7 @@ export default class Ticker {
      * Remove the callback
      *
      * @param {Sting} key - indetifier
-     * @returns {Ticker}
+     * @returns {Heartbeat}
      */
     off(key) {
         delete callbacks[key];

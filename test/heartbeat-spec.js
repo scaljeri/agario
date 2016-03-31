@@ -4,7 +4,7 @@ import chaiAsPromised from 'chai-as-promised';
 var sinon = require("sinon");
 var sinonChai = require("sinon-chai");
 
-import Ticker from '../src/shared/ticker';
+import Heartbeat from '../src/shared/heartbeat';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -13,12 +13,12 @@ chai.use(sinonChai);
 let should = chai.should();
 
 
-describe('Ticker:', () => {
-    let ticker = Ticker.getInstance(),
+describe('Heartbeat:', () => {
+    let beat = Heartbeat.getInstance(),
         origSetTimeout;
 
     beforeEach(() => {
-        ticker.reset(); // Need to reset the singleton each run
+        beat.reset(); // Need to reset the singleton each run
         origSetTimeout = setTimeout;
         setTimeout = () => {
         };
@@ -30,27 +30,27 @@ describe('Ticker:', () => {
 
     it('should not be possible to create a new instance', () => {
         (() => {
-            new Ticker();
+            new Heartbeat();
         }).should.throw(Error, /Cannot construct singleton/);
     });
 
     describe('#fps', () => {
         it('should have a default FPS', () => {
-            ticker.fps.should.equal(10);
+            beat.fps.should.equal(10);
         });
         it('should set the FPS', () => {
-            ticker.fps = 20;
-            ticker.fps.should.equal(20);
+            beat.fps = 20;
+            beat.fps.should.equal(20);
         });
 
         it('should ignore a string as input', () => {
-            ticker.fps = 'this is not a FPS';
-            ticker.fps.should.equal(10);
+            beat.fps = 'this is not a FPS';
+            beat.fps.should.equal(10);
         });
     });
 
     describe('Ticking (#on / #off)', () => {
-        let cb1, cb2, cb3, cb4, cb5;
+        let cb1, cb2, cb3, cb4, cb5, cb6;
 
         beforeEach(() => {
             cb1 = sinon.stub().returns(Promise.resolve());
@@ -58,16 +58,24 @@ describe('Ticker:', () => {
             cb3 = sinon.stub().returns(Promise.resolve());
             cb4 = sinon.stub().returns(Promise.resolve());
             cb5 = sinon.stub().returns(Promise.resolve());
-            ticker.on('test1', cb1,);
-            ticker.on('test2', cb2, {skip: 2});
-            ticker.on('test3', cb3, {terminal: true, skip: 2});
-            ticker.on('test4', cb4, {priority: 2});
-            ticker.on('test5', cb5);
+            cb6 = sinon.stub().returns(Promise.resolve());
+            beat.on('test1', cb1,);
+            beat.on('test2', cb2, {skip: 2});
+            beat.on('test3', cb3, {terminal: true, skip: 2});
+            beat.on('test4', cb4, {priority: 2});
+            beat.on('test5', cb5);
+            beat.on('test6', cb6, {priority: -1});
         });
 
         describe('First tick', () => {
             beforeEach((done) => {
-                ticker.tick().then(done);
+                beat.tick().then(done);
+            });
+
+            it('should not be possible to register duplicate key', () => {
+                (() => {
+                    beat.on('test1', () => {})
+                }).should.throw(Error, /#on Error: Duplicate key test1/);
             });
 
             it('should not have called the 1st cb (no options)', () => {
@@ -92,19 +100,19 @@ describe('Ticker:', () => {
                 cb5.should.have.not.been.called;
             });
 
+            it('should not have called the 6th callback', () => {
+                cb6.should.have.not.been.called;
+            });
+
             it('should have called the prio 1 first', () => {
                 cb4.should.have.been.calledBefore(cb3);
             });
-
-            it('should remove the 1st callback', () => {
-                //ticker.off('');
-            })
         });
 
         describe('Second tick', () => {
             beforeEach((done) => {
-                ticker.tick()
-                    .then(::ticker.tick) // Second tick
+                beat.tick()
+                    .then(::beat.tick) // Second tick
                     .then(done);
             });
 
@@ -127,12 +135,16 @@ describe('Ticker:', () => {
             it('should have called the 5th once (no options)', () => {
                 cb5.should.have.been.calledOnce;
             });
+
+            it('should have called the 6th callback', () => {
+                cb6.should.have.been.called;
+            });
         });
 
         describe('Remove callbacks', () => {
             beforeEach((done) => {
-                ticker.off('test3');
-                ticker.tick().then(done);
+                beat.off('test3');
+                beat.tick().then(done);
             });
 
             it('should not have called the 3rd callback', () => {
@@ -154,7 +166,7 @@ describe('Ticker:', () => {
         beforeEach(() => {
             clock = sinon.useFakeTimers();
 
-            tick = sinon.stub(ticker, 'tick').returns({
+            tick = sinon.stub(beat, 'tick').returns({
                 then: (cb) => {
                     innerCb = cb;
                     return promise;
@@ -162,7 +174,7 @@ describe('Ticker:', () => {
             });
 
             timeoutSpy = sinon.stub(global, 'setTimeout').returns(null);
-            startPromise = ticker.start();
+            startPromise = beat.start();
             clock.tick(50);
         });
 
@@ -173,7 +185,7 @@ describe('Ticker:', () => {
 
         it('should start a tick', () => {
             tick.should.have.been.called;
-            ticker.isBusy.should.be.ok;
+            beat.isBusy.should.be.ok;
         });
 
         it('should return the promise from the #tick', () => {
@@ -181,7 +193,7 @@ describe('Ticker:', () => {
         });
 
         it('should not start a new tick if still busy', () => {
-            ticker.start();
+            beat.start();
 
             tick.should.have.been.calledOnce;
         });
@@ -189,7 +201,7 @@ describe('Ticker:', () => {
         it('should be be ready for the next tick if promise resolves', () => {
             innerCb();
 
-            ticker.isBusy.should.not.be.ok;
+            beat.isBusy.should.not.be.ok;
         });
 
         it('should schedule the next tick', () => {
@@ -215,7 +227,7 @@ describe('Ticker:', () => {
         };
 
         beforeEach(() => {
-            tick = sinon.stub(ticker, 'tick').returns({
+            tick = sinon.stub(beat, 'tick').returns({
                 then: (cb) => {
                     innerCb = cb;
                     return promise;
@@ -225,10 +237,10 @@ describe('Ticker:', () => {
             spy = sinon.stub(global, 'clearTimeout').returns(null);
             sinon.stub(global, 'setTimeout').returns(9);
 
-            ticker.start();
+            beat.start();
             innerCb();
 
-            ticker.stop();
+            beat.stop();
         });
 
         afterEach(() => {
@@ -242,7 +254,7 @@ describe('Ticker:', () => {
         });
 
         it('should not be busy', () => {
-            ticker.isBusy.should.not.be.ok;
+            beat.isBusy.should.not.be.ok;
         });
 
     });
