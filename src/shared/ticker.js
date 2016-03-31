@@ -1,6 +1,6 @@
 let singleton;
 let singletonEnforcer = Symbol();
-let callbacks, counter, fps;
+let callbacks, counter, fps, isBusy;
 
 const FPS = 10;
 
@@ -40,6 +40,7 @@ export default class Ticker {
         fps = FPS;
         callbacks = {};
         counter = 0;
+        isBusy = false;
 
         return this;
     }
@@ -61,6 +62,10 @@ export default class Ticker {
         if (!isNaN(parseFloat(input)) && isFinite(input)) {
             fps = input;
         }
+    }
+
+    get isBusy() {
+        return isBusy;
     }
 
     /**
@@ -103,24 +108,18 @@ export default class Ticker {
     }
 
     start() {
-        if (!this.promise) {
-            this.counter = 0;
-
-            this.promise = Promise((resolve, reject) => {
-                this.resolve = resolve;
-                this.reject = reject;
-            });
-        }
-
-        if (!this.isBusy) {
+        if (!isBusy) {
             let startTime = Date.now();
 
-            this.tick().then(() => {
+            isBusy = true;
+
+            this.promise = this.tick().then(() => {
                 // Prepare next tick
-                let diff = Date.now() - startTime,
+                let diff = Math.max(Date.now() - startTime, 1),
                     fdrops = Math.floor(diff / 100);
 
-                this.id = setTimeout(::this.start, fdrops > 0 ? 0 : (1000 - (100 % diff)) / fps);
+                this.timeoutId = setTimeout(::this.start, (fdrops > 0 ? 0 : (1000/fps - (diff % 100))));
+                isBusy = false;
             });
         }
 
@@ -128,20 +127,16 @@ export default class Ticker {
     }
 
     stop() {
-        cancelTimeout(this.timeoutId);
-        this.isBusy = false;
+        clearTimeout(this.timeoutId);
+        isBusy = false;
 
         // TODO: Create stats etc ....
-
-        this.resolve();
 
         return this;
     }
 
 
     tick() {
-        this.isBusy = true;
-
         let keys = Object.keys(callbacks).sort((a, b) => {
             let optA = callbacks[a].options,
                 optB = callbacks[b].options;
@@ -166,12 +161,9 @@ export default class Ticker {
             });
 
         return Promise.all(callables.map((key) => {
-            let obj = callbacks[key];
-
-            return counter % (obj.options.skip + 1) === 0 ? obj.callback() : Promise.resolve();
+            return callbacks[key].callback();
         })).then(() => {
             counter++;
-            this.isBusy = false;
         })
     }
 }

@@ -49,10 +49,10 @@ describe('Ticker:', () => {
         });
     });
 
-    describe('#on / #off', () => {
+    describe('Ticking (#on / #off)', () => {
         let cb1, cb2, cb3, cb4, cb5;
 
-        beforeEach((done) => {
+        beforeEach(() => {
             cb1 = sinon.stub().returns(Promise.resolve());
             cb2 = sinon.stub().returns(Promise.resolve());
             cb3 = sinon.stub().returns(Promise.resolve());
@@ -63,11 +63,13 @@ describe('Ticker:', () => {
             ticker.on('test3', cb3, {terminal: true, skip: 2});
             ticker.on('test4', cb4, {priority: 2});
             ticker.on('test5', cb5);
-
-            ticker.tick().then(done);
         });
 
         describe('First tick', () => {
+            beforeEach((done) => {
+                ticker.tick().then(done);
+            });
+
             it('should not have called the 1st cb (no options)', () => {
                 //promise.should.be.fulfilled.then(() => {
                 cb1.should.not.have.been.called;
@@ -93,11 +95,17 @@ describe('Ticker:', () => {
             it('should have called the prio 1 first', () => {
                 cb4.should.have.been.calledBefore(cb3);
             });
+
+            it('should remove the 1st callback', () => {
+                //ticker.off('');
+            })
         });
 
         describe('Second tick', () => {
             beforeEach((done) => {
-                ticker.tick().then(done); // Second tick
+                ticker.tick()
+                    .then(::ticker.tick) // Second tick
+                    .then(done);
             });
 
             it('should have called 1st twice (no options)', () => {
@@ -120,5 +128,122 @@ describe('Ticker:', () => {
                 cb5.should.have.been.calledOnce;
             });
         });
+
+        describe('Remove callbacks', () => {
+            beforeEach((done) => {
+                ticker.off('test3');
+                ticker.tick().then(done);
+            });
+
+            it('should not have called the 3rd callback', () => {
+                cb3.should.not.have.been.called;
+            });
+
+            it('should not have called the 1st cb (no options)', () => {
+                // without cb3, cb1 should be called
+                cb1.should.have.been.called;
+            });
+        })
+    });
+
+    describe('#start', () => {
+        let clock, tick, innerCb, timeoutSpy, startPromise,
+            promise = () => {
+            };
+
+        beforeEach(() => {
+            clock = sinon.useFakeTimers();
+
+            tick = sinon.stub(ticker, 'tick').returns({
+                then: (cb) => {
+                    innerCb = cb;
+                    return promise;
+                }
+            });
+
+            timeoutSpy = sinon.stub(global, 'setTimeout').returns(null);
+            startPromise = ticker.start();
+            clock.tick(50);
+        });
+
+        afterEach(() => {
+            tick.restore();
+            clock.restore();
+        });
+
+        it('should start a tick', () => {
+            tick.should.have.been.called;
+            ticker.isBusy.should.be.ok;
+        });
+
+        it('should return the promise from the #tick', () => {
+            promise.should.equals(startPromise);
+        });
+
+        it('should not start a new tick if still busy', () => {
+            ticker.start();
+
+            tick.should.have.been.calledOnce;
+        });
+
+        it('should be be ready for the next tick if promise resolves', () => {
+            innerCb();
+
+            ticker.isBusy.should.not.be.ok;
+        });
+
+        it('should schedule the next tick', () => {
+            innerCb();
+
+            timeoutSpy.should.have.been.calledOnce;
+            timeoutSpy.args[0][0].should.be.instanceOf(Function);
+            timeoutSpy.args[0][1].should.equal(50);
+        });
+
+        it('should schedule immidiatly if tick took longer than a frame', () => {
+            clock.tick(51);
+            innerCb();
+
+            timeoutSpy.should.have.been.calledOnce;
+            timeoutSpy.args[0][0].should.be.instanceOf(Function);
+            timeoutSpy.args[0][1].should.equal(0);
+        });
+    });
+
+    describe('#stop', () => {
+        let innerCb, spy, tick, promise = () => {
+        };
+
+        beforeEach(() => {
+            tick = sinon.stub(ticker, 'tick').returns({
+                then: (cb) => {
+                    innerCb = cb;
+                    return promise;
+                }
+            });
+
+            spy = sinon.stub(global, 'clearTimeout').returns(null);
+            sinon.stub(global, 'setTimeout').returns(9);
+
+            ticker.start();
+            innerCb();
+
+            ticker.stop();
+        });
+
+        afterEach(() => {
+            tick.restore();
+            spy.restore();
+        });
+
+        it('should clear the scheduled tick', () => {
+            spy.should.have.been.calledOnce;
+            spy.args[0][0].should.equal(9);
+        });
+
+        it('should not be busy', () => {
+            ticker.isBusy.should.not.be.ok;
+        });
+
     });
 });
