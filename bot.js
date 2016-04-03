@@ -2,9 +2,9 @@
 
 import Promise from 'promise';
 
-import MainPage from './src/game/pages/main-page';
-import SettingsPage from './src/game/pages/settings-page';
-import Facebook from './src/game/facebook';
+import MainPage from './src/backend/pages/main-page';
+import SettingsPage from './src/backend/pages/settings-page';
+import Facebook from './src/backend/facebook';
 
 const WIDTH = 700,
     HEIGHT = 700,
