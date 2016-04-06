@@ -1,3 +1,12 @@
-export default [
-    1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16
-]
+let data = {
+    width: 9,
+    height: 9,
+    stride: 4,
+    pixels: []
+};
+
+for(let i = 0; i < 324; i++) {
+   data.pixels.push(i);
+}
+
+export default data;

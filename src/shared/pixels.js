@@ -28,7 +28,7 @@ export default class Pixels {
      * @returns {Number}
      */
     get(x, y) {
-        let step = (this.width * y + x) << 2;
+        let step = (this.width * y + x) << this._blShift;
         return this._pixels[step];
     }
 
@@ -40,21 +40,19 @@ export default class Pixels {
      * @param {Number} stride - Supported values are 1 and 4
      * @returns {{data: *, shape: number[], stride: number[], offset: number}}
      */
-    ndarray(stride = 4) {
-        if (stride !== 1 && stride !== 4) {
-            throw Error(`Stride should be 1 or 4 (received: ${stride}`);
-        }
+    ndarray(stride) {
+        stride = stride || this.stride;
 
         return {
-            data: stride === 4 ? this._pixels : this._pixels.reduce((newData, value, index) => {
-                if (index % 4 === 0) {
+            data: stride === 4 ? this._pixels : this._pixels.reduce((newArr, value, index) => {
+                if (index % stride === 0) {
                     newArr.push(value);
                 }
 
                 return newArr;
-            }),
-            shape: [this.width, this.height, 4],
-            stride: [4, 4 * this.width, 1],
+            }, []),
+            shape: [this.width, this.height, stride],
+            stride: [stride, stride * this.width, 1],
             offset: 0
         };
     }
