@@ -4,7 +4,7 @@ import chaiAsPromised from 'chai-as-promised';
 var sinon = require("sinon");
 var sinonChai = require("sinon-chai");
 
-import * as utils from '../src/shared/utils';
+import * as utils from '../../src/shared/utils';
 
 chai.use(chaiAsPromised);
 chai.should();

@@ -3,7 +3,7 @@ import chaiAsPromised from 'chai-as-promised';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-import Heartbeat from '../src/shared/heartbeat';
+import Heartbeat from '../../src/shared/heartbeat';
 
 chai.use(chaiAsPromised);
 chai.should();

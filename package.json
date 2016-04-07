@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "./node_modules/.bin/babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha",
+    "test": "./node_modules/.bin/babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha -- --recursive",
     "test-es5": "./node_modules/.bin/mocha --compilers js:babel-core/register --harmony",
     "bundle": "./node_modules/.bin/browserify -t [ babelify --presets [ es2015 ] ] src/game/remote.js -o bundle.js",
     "watch": "./node_modules/.bin.watchify -t [ babelify --presets [ es2015 ] ] src/index.js -o bundle.js",

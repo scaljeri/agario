@@ -1,7 +1,7 @@
 import chai from 'chai';
 
-import data from './fixtures/pixels-dummy';
-import Pixels from '../src/shared/pixels';
+import data from '../fixtures/pixels-dummy';
+import Pixels from '../../src/shared/pixels';
 
 chai.should();
 let should = chai.should();
