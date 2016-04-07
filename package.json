@@ -38,6 +38,7 @@
     "esdoc-es7-plugin": "0.0.3",
     "isparta": "^4.0.0",
     "mocha": "^2.4.5",
+    "mock-fs": "^3.8.0",
     "mocktail": "^0.3.8",
     "ndarray": "^1.0.18",
     "numeric": "^1.2.6",
