@@ -7,3 +7,7 @@ before_script:
 branches:
   except:
     - gh-pages
+
+addons:
+  code_climate:
+    repo_token: f32a3edd8d14eab7fe1b5606ae76f34b0ae400fcf4fc1e9d4fd9a8ef4fe17c34
