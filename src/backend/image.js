@@ -8,7 +8,10 @@ export default class Image extends Pixels {
     constructor(outputDir) {
         super();
 
-        this._directory = outputDir;
+        if (outputDir) {
+            this._directory = outputDir;
+            fs.existsSync(outputDir) || fs.mkdirSync(outputDir);
+        }
     }
 
     save() {

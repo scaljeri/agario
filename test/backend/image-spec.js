@@ -11,7 +11,9 @@ chai.use(sinonChai);
 let should = chai.should();
 
 import mock from 'mock-fs';
+import fs from 'fs';
 
+import dummyPixels from '../fixtures/dummy-pixels';
 import Image from '../../src/backend/image';
 
 
@@ -19,22 +21,16 @@ describe('Image:', () => {
     let image, spy;
 
     beforeEach(() => {
-        mock({
-            'screenshot.png': 'bar foo'
-        });
-
         image = new Image();
-
-        //spy = sinon.stub(image, 'filename').returns('screenshot.png');
-    });
-
-    afterEach(() => {
-        mock.restore();
     });
 
     describe('#filename', () => {
         it('should generate a string', () => {
             image.filename().should.be.a('string');
+        });
+
+        it('should have a png extension', () => {
+            image.filename().should.match(/\.png$/);
         });
 
         it('should generate random strings', () => {
@@ -49,10 +45,22 @@ describe('Image:', () => {
         });
     });
 
-    it('test', () => {
-        //let output = image.filename();
+    describe('#save', () => {
+        beforeEach(() => {
+            mock({});
+            image = new Image('./dir');
+            spy = sinon.stub(image, 'filename').returns('screenshot.png');
 
-        //output.should.equals('screenshot.png');
-        //spy.should.have.been.called;
+            image.set(dummyPixels.pixels, dummyPixels.height, dummyPixels.width, 4)
+                 .save()
+        });
+
+        afterEach(() => {
+            mock.restore();
+        });
+
+        it('should create an image', () => {
+            fs.lstatSync('./dir/screenshot.png').isFile().should.be.ok;
+        });
     });
 });

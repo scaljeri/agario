@@ -1,6 +1,6 @@
 import chai from 'chai';
 
-import data from '../fixtures/pixels-dummy';
+import data from '../fixtures/dummy-pixels';
 import Pixels from '../../src/shared/pixels';
 
 chai.should();

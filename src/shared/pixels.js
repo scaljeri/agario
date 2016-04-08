@@ -75,7 +75,7 @@ export default class Pixels {
      * @param pixels - Canvas pixel array (stride of 4)
      * @param {Number} height - height of the canvas
      * @param {Number} width - width of the canvas
-     * @returns {{data: (*|data), shape: *[], stride: number[], offset: number}|*}
+     * @returns {Object} this
      */
     set(pixels, height, width, stride) {
         this._width  = width;
@@ -83,6 +83,8 @@ export default class Pixels {
         this._pixels = pixels;
         this._stride = stride || pixels.length / (width * height); // Expect 1, 2 or 4
         this._blShift = Math.floor(this._stride/2);                //  Bitwise left shift value;
+
+        return this;
     }
 }
 
