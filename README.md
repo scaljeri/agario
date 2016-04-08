@@ -1,4 +1,4 @@
-## AGAR.IO Driver
+## AGAR.IO Driver [![Build Status](https://travis-ci.org/scaljeri/agario-driver.svg?branch=master)](https://travis-ci.org/scaljeri/agario-driver)
 
 This project is the foundation of managing the environment for an agar.io 
 [bot](https://github.com/scaljeri/agario-bot) game play. 
