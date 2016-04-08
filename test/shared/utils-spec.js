@@ -1,24 +1,10 @@
 import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
-//import spies from 'chai-spies';
-var sinon = require("sinon");
-var sinonChai = require("sinon-chai");
 
 import * as utils from '../../src/shared/utils';
 
-chai.use(chaiAsPromised);
 chai.should();
-chai.use(sinonChai);
-let should = chai.should();
-
 
 describe('Utils:', () => {
-    beforeEach(() => {
-    });
-
-    afterEach(() => {
-    });
-
     describe('#isNumber', () => {
         it('should pass zero', () => {
             utils.isNumber(0).should.be.ok;
