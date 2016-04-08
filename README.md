@@ -1,4 +1,4 @@
-## AGAR.IO Driver [![Build Status](https://travis-ci.org/scaljeri/agario-driver.svg?branch=master)](https://travis-ci.org/scaljeri/agario-driver)
+## AGAR.IO Driver [![Build Status](https://travis-ci.org/scaljeri/agario-driver.svg?branch=master)](https://travis-ci.org/scaljeri/agario-driver) [![Coverage Status](https://coveralls.io/repos/github/scaljeri/agario-driver/badge.svg?branch=master)](https://coveralls.io/github/scaljeri/agario-driver?branch=master)
 
 [![Join the chat at https://gitter.im/scaljeri/agario-driver](https://badges.gitter.im/scaljeri/agario-driver.svg)](https://gitter.im/scaljeri/agario-driver?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
