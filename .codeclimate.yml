@@ -3,10 +3,7 @@ engines:
     enabled: true
     config:
       languages:
-      - ruby
       - javascript
-      - python
-      - php
   eslint:
     enabled: true
   fixme:
@@ -30,5 +27,6 @@ ratings:
   eslint:
     enabled: true
 exclude_paths:
+- test/*
 - src/bot1/*
 - src/bot2/*
