@@ -2,7 +2,7 @@
 
 [![Join the chat at https://gitter.im/scaljeri/agario-driver](https://badges.gitter.im/scaljeri/agario-driver.svg)](https://gitter.im/scaljeri/agario-driver?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-This project is the foundation of managing the environment for an agar.io 
+This project manages the environment for an agar.io 
 [bot](https://github.com/scaljeri/agario-bot) game play. 
 
 This project provides the following:
