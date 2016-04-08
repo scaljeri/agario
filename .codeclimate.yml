@@ -1,14 +1,15 @@
 engines:
-  rubocop:
+  duplication:
     enabled: true
-    #checks:
-    # Rubocop/Metrics/ClassLength:
-    #   enabled: false
-  brakeman:
-    enabled: true
-    #exclude_fingerprints:
-    #- 08c185b3f764f262539a1f76997d3a89
+    config:
+      languages:
+      - ruby
+      - javascript
+      - python
+      - php
   eslint:
+    enabled: true
+  fixme:
     enabled: true
   csslint:
     enabled: true
@@ -19,8 +20,15 @@ engines:
       - javascript
 ratings:
   paths:
-  - src/**
-  - test/**
+  - "**.inc"
+  - "**.js"
+  - "**.jsx"
+  - "**.module"
+  - "**.php"
+  - "**.py"
+  - "**.rb"
+  eslint:
+    enabled: true
 exclude_paths:
 - src/bot1/*
 - src/bot2/*
