@@ -18,7 +18,11 @@ export default class Pixels {
     /**
      * @constructor
      */
-    constructor() {}
+    constructor(pixels, height, width, stride) {
+        if (pixels) {
+            this.set(pixels, height, width, stride);
+        }
+    }
 
     /**
      * Access the RGBA array by `x` and `y`
