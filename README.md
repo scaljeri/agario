@@ -8,7 +8,7 @@ This project manages the environment for an agar.io
 This project provides the following:
 
    * Facebook login
-   * back and white and low res setup
+   * black and white and low res setup
    * Start/stop the game  (restart on game-over if required)
    * Shared libraries for bots
    
