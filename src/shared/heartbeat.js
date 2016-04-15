@@ -1,5 +1,3 @@
-let singleton;
-let singletonEnforcer = Symbol();
 let callbacks, counter, fps, isBusy;
 
 const FPS = 10;
@@ -12,23 +10,8 @@ const FPS = 10;
  *   - stop the execution chain (tasks with an equal or lower prio can be skipped)
  */
 export default class Heartbeat {
-    constructor(enforcer) {
-        if (enforcer !== singletonEnforcer) throw Error('Cannot construct singleton');
-
+    constructor() {
         this.reset();
-    }
-
-    /**
-     * Returns the singleton instance
-     *
-     * @returns {Heartbeat}
-     */
-    static getInstance() {
-        if (!singleton) {
-            singleton = new Heartbeat(singletonEnforcer);
-        }
-
-        return singleton;
     }
 
     /**

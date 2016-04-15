@@ -13,7 +13,7 @@ let should = chai.should();
 
 
 describe('Heartbeat:', () => {
-    let beat = Heartbeat.getInstance(),
+    let beat = new Heartbeat(),
         origSetTimeout;
 
     beforeEach(() => {
@@ -27,11 +27,12 @@ describe('Heartbeat:', () => {
         setTimeout = origSetTimeout;
     });
 
+    /*
     it('should not be possible to create a new instance', () => {
         (() => {
             new Heartbeat();
         }).should.throw(Error, /Cannot construct singleton/);
-    });
+    }); */
 
     describe('#fps', () => {
         it('should have a default FPS', () => {

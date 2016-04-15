@@ -1,24 +1,28 @@
-import Pixels from '../shared/pixels';
-
 export default class Screen {
+    constructor(pixelFactory) {
+        this._pixelFactory = pixelFactory;
+    }
+
     calibrate() {
         if (!this._ctx) {
             this._canvas = document.querySelector('#canvas');
             this._ctx = this._canvas.getContext('2d');
         }
 
-        this.width = this._canvas.width;
-        this.height = this._cnavas.height;
+        this._width = this._canvas.width;
+        this._height = this._canvas.height;
+
+        return this;
     }
 
     takeScreenshot(stride = 1) {
-        if (!this.ctx) {
+        if (!this._ctx) {
             this.calibrate();
         }
 
-        let data = this.ctx.getImageData(0, 0, this.width, this.height).data;
+        let data = this._ctx.getImageData(0, 0, this._width, this._height).data;
 
-        return new Pixels(data, this.height, this.width, 4)
+        return this._pixelFactory.getInstance(data, this._height, this._width, 4)
             .ndarray(stride);
     }
 }

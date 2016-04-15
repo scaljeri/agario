@@ -9,7 +9,7 @@
   "scripts": {
     "test": "./node_modules/.bin/babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha -- --recursive",
     "test-es5": "./node_modules/.bin/mocha --compilers js:babel-core/register --harmony",
-    "bundle": "./node_modules/.bin/browserify -t [ babelify --presets [ es2015 ] ] src/game/remote.js -o bundle.js",
+    "bundle": "./node_modules/.bin/browserify -t [ babelify --presets [ es2015 ] ] src/browser/index.js -o bundle.js",
     "watch": "./node_modules/.bin.watchify -t [ babelify --presets [ es2015 ] ] src/index.js -o bundle.js",
     "start": "./node_modules/.bin/browser-sync start --server --files bundle.js",
     "docs": "./node_modules/.bin/esdoc -c esdoc.json && open docs/esdoc/index.html"
@@ -37,6 +37,7 @@
     "esdoc": "^0.4.6",
     "esdoc-es7-plugin": "0.0.3",
     "isparta": "^4.0.0",
+    "javascript-dependency-injection": "git://github.com/scaljeri/javascript-dependency-injection.git",
     "mocha": "^2.4.5",
     "mock-fs": "^3.8.0",
     "mocktail": "^0.3.8",
