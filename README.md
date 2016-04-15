@@ -87,11 +87,9 @@ First start a webserver in the root of the project. For example
     
 Next, open the console and enter the following code
 
-    var script = document.createElement('script');
-    script.src = 'http://localhost:8000/bundle.js';
-    document.body.appendChild(script);
+    console> $.getScript('http://localhost:8000/bundle.js')
     
-TODO
+TODO: Start the bot
 
 
 Open the console of Chrome and enter the f
