@@ -78,3 +78,20 @@ credentials in a file called `facebook.json`. Example file:
 
     $> ./bot.js --facebook --snapshots=./snapshots
     
+    
+## Manual load bundle
+
+First start a webserver in the root of the project. For example
+
+    $> python -m SimpleHTTPServer
+    
+Next, open the console and enter the following code
+
+    var script = document.createElement('script');
+    script.src = 'http://localhost:8000/bundle.js';
+    document.body.appendChild(script);
+    
+TODO
+
+
+Open the console of Chrome and enter the f
