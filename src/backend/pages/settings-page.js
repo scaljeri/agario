@@ -30,7 +30,6 @@ export default class SettingsPage extends Base {
         return this.findElement(css)
             .then((element) => {
                 // Always check a checkbox first, because sometimes default checked-state gets ignored
-                console.lo
                 return element.click()
                     .then(() => {
                         return element.getAttribute("checked")

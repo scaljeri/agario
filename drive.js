@@ -14,7 +14,7 @@ const WIDTH = 700,
         fps: 10
     };
 
-class Bot {
+class Driver {
     constructor() {
         this.parseArgvs();
 
@@ -25,11 +25,6 @@ class Bot {
                 // Lets play!!!
             })
             .then(::this.page.close);
-
-        //this.page = new Page(webdriver, browser, {isGuest: !this.settings.facebook});
-        //this.agario = new Agario(this.page, {snapshotDir: this.settings.snapshots});
-        //
-        //this.page.load().then(::this.setup);
     }
 
     parseArgvs() {
@@ -55,54 +50,13 @@ class Bot {
                 }
             })
             .then(::this.settingsPage.checkCheckboxes)
-            .then(::this.settingsPage.lowResolution);
-        //.then(::this.page.injectJS)
-        //.then(::this.begin);
+            .then(::this.settingsPage.lowResolution)
+            .then(() => this.page.injectJS());
     }
 
-    begin() {
-        this.counter = 0;
+    drive() {
         Engine.getInstance().start();
     }
-
-    /*
-     checkState() {
-     console.log('check state');
-     return new Promise((resolve, reject) => {
-     this.counter++;
-
-     if (this.counter > 9) {
-     this.page.isSettingsVisible().then((state) => {
-     if (state === true) {
-     reject();
-     } else {
-     resolve();
-     }
-     })
-     } else {
-     resolve();
-     }
-     });
-     }
-
-     monitorGameOver() {
-     let loopCount = 0;
-
-     console.log('loopin');
-     this.page.isSettingsVisible()
-     .then(() => {
-     console.log('af');
-     if (++loopCount === this.settings.loop) {
-     this.browser.close();
-     } else {
-     this.play(); // Play again
-     }
-     }, () => {
-     console.log('still playiong');
-     this.monitorGameOver();
-     });
-     }
-     */
 }
 
-new Bot();
+new Driver();
