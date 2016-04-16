@@ -1,9 +1,10 @@
 import Promise from 'promise';
-import Heartbeat from '../shared/heartbeat';
 
 export default class Snapshots {
-    constructor(dir = './snapshots') {
+    constructor(heartbeat, image, dir = './snapshots') {
         this._dir = dir;
+
+        // TODO: Setup heartbeat
     }
 
     start() {
