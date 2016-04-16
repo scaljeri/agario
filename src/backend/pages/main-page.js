@@ -28,4 +28,8 @@ export default class MainPage extends Base {
         return fsp.readFile(filename, {encoding: 'utf8'})
             .then(js => this.browser.executeScript(js));
     }
+
+    resolve() {
+        this.webdriver.promise.when();
+    }
 }

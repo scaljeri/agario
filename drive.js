@@ -1,10 +1,12 @@
 #!./node_modules/.bin/babel-node
 
 import Promise from 'promise';
+import DI from 'javascript-dependency-injection';
 
 import MainPage from './src/backend/pages/main-page';
 import SettingsPage from './src/backend/pages/settings-page';
 import Facebook from './src/backend/facebook';
+import Snapshots from './src/backend/snapshots';
 
 const WIDTH = 700,
     HEIGHT = 700,
@@ -12,19 +14,26 @@ const WIDTH = 700,
     ARGVS_DEFAULT = {
         snapshots: './snapshots',
         fps: 10
-    };
+    },
+    di = new DI();
 
 class Driver {
     constructor() {
         this.parseArgvs();
 
-        this.page = new MainPage();
-        this.settingsPage = new SettingsPage();
+        di.register('facebook', Facebook, [], {singletomn: true});
+        di.register('mainPage', MainPage, [], {singleton: true});
+        di.register('settingsPage', SettingsPage, [], {singleton: true});
+        di.register('snapshots', Snapshots, [], {singletomn: true});
 
         this.setup().then(() => {
-                // Lets play!!!
+                if (this.settings.snapshots) {
+                    return di.getInstance('snapshots').start();
+                } else {
+                    // Lets play!!!
+                }
             })
-            .then(::this.page.close);
+            .then(() => di.getInstance('mainPage').close());
     }
 
     parseArgvs() {
@@ -41,17 +50,20 @@ class Driver {
     }
 
     setup() {
-        return this.page.load()
+        let settingsPage = di.getInstance('settingsPage'),
+            mainPage = di.getInstance('mainPage');
+
+        return mainPage.load()
             .then(() => {
                 if (this.settings.facebook) {
-                    return new Facebook().login();
+                    return di.getInstance('facebook').login();
                 } else {
-                    this.page.webdriver.promise.when();
+                    mainPage.resolve();
                 }
             })
-            .then(::this.settingsPage.checkCheckboxes)
-            .then(::this.settingsPage.lowResolution)
-            .then(() => this.page.injectJS());
+            .then(::settingsPage.checkCheckboxes)
+            .then(::settingsPage.lowResolution)
+            .then(() => mainPage.injectJS());
     }
 
     drive() {
