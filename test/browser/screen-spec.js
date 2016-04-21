@@ -11,33 +11,32 @@ chai.should();
 chai.use(sinonChai);
 
 describe('Screen:', () => {
-    let screen, spyImageData, spyContext, spySelector,
+    let screen, spyAddEventListener, spyImageData, spyContext, spySelector,
         getImageData = () => ({data: dummyPixels.pixels}),
-        getContext = () => ({getImageData: getImageData});
+        getContext = () => ({getImageData: getImageData}),
+        addEventListener = () => {};
 
     beforeEach(() => {
+        spyAddEventListener = sinon.spy(addEventListener);
         spyContext = sinon.spy(getContext);
         spyImageData = sinon.spy(getImageData);
 
         global.document = {
             querySelector: () => {
                 return {
+                    addEventListener: spyAddEventListener,
                     getContext: spyContext,
                     height: dummyPixels.height,
-                    width: dummyPixels.height
+                    width: dummyPixels.height,
                 }
             }
         };
         spySelector = sinon.spy(global.document, 'querySelector');
 
-        screen = new Screen(dummyPixelFactor);
+        screen = new Screen(dummyPixelFactor).setup();
     });
 
-    describe('#calibrate', () => {
-        beforeEach(() => {
-            screen.calibrate();
-        });
-
+    describe('#setup', () => {
         it('should have selected the canvas', () => {
             spySelector.should.have.been.calledWith('#canvas');
         });
@@ -48,6 +47,10 @@ describe('Screen:', () => {
 
         it('should have selected the canvas', () => {
             screen._ctx.should.be.defined;
+        });
+
+        it('should listen to keydown events', () => {
+            spyAddEventListener.args[0][0].should.equal('keydown');
         });
     });
 

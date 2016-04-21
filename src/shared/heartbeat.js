@@ -97,16 +97,15 @@ export default class Heartbeat {
     start() {
         if (!isBusy) {
             let startTime = Date.now();
-
             isBusy = true;
 
             this.promise = this.tick().then(() => {
                 // Prepare next tick
                 let diff = Math.max(Date.now() - startTime, 1),
-                    fdrops = Math.floor(diff / 100);
+                    fdrops = Math.floor(diff / fps);
 
-                this.timeoutId = setTimeout(::this.start, (fdrops > 0 ? 0 : (1000/fps - (diff % 100))));
                 isBusy = false;
+                this.timeoutId = setTimeout(::this.start, Math.max(0, fps - diff - fps * fdrops));
             });
         }
 
@@ -114,8 +113,11 @@ export default class Heartbeat {
     }
 
     stop() {
-        clearTimeout(this.timeoutId);
-        isBusy = false;
+        if (this.timeoutId) {
+            clearTimeout(this.timeoutId);
+        }
+
+        this.timeoutId = null;
 
         // TODO: Create stats etc ....
 
@@ -125,14 +127,14 @@ export default class Heartbeat {
 
     tick() {
         let keys = Object.keys(callbacks).sort((a, b) => {
-            let optA = callbacks[a].options,
-                optB = callbacks[b].options;
+                let optA = callbacks[a].options,
+                    optB = callbacks[b].options;
 
-            // Sort first on `priority` and second on `terminal`
-            return optA.priority > optB.priority ? -1 :
-                optB.priority > optA.priority ? 1 :
-                    (optA.terminal ? -1 : (optB.terminal ? 1 : 0));
-        });
+                // Sort first on `priority` and second on `terminal`
+                return optA.priority > optB.priority ? -1 :
+                    optB.priority > optA.priority ? 1 :
+                        (optA.terminal ? -1 : (optB.terminal ? 1 : 0));
+            });
 
         let terminal = false,
             callables = keys.filter((key) => {

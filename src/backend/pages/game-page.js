@@ -1,11 +1,14 @@
 import fs from 'fs';
 import Base from './base-page';
 
+const BTN_FB = '.btn-play',
+    BTN_GUEST = '.btn-play-guest';
+
 export default class GamePage extends Base {
     constructor(options) {
         super(options);
 
-        this.as = new webdriver.ActionSequence(browser);
+        this.as = new this.webdriver.ActionSequence(this.browser);
     }
 
     /**
@@ -14,7 +17,7 @@ export default class GamePage extends Base {
      * @returns {Promise}
      */
     start() {
-        return this.findElement(this.options.isGuest ? BTN_GUEST : BTN_FB)
+        return this.findElement(this.options.facebook ? BTN_FB : BTN_GUEST)
             .then(
                 (element) => {
                     element.isDisplayed()
@@ -31,24 +34,12 @@ export default class GamePage extends Base {
                 });
     }
 
-
-    injectJS(js) {
-        return new Promise((resolve, reject) => {
-            fs.readFile('./bundle.js', 'utf8', (err, js) => {
-                if (err) {
-                    reject(err);
-                }
-                this.browser.executeScript(js).then(resolve);
-            });
-        });
-    }
-
     getMouseCoords() {
         return this.browser.executeScript('return bOt.analyse()');
     }
 
-    takeSnapshot() {
-        return this.browser.executeScript('return bOt.takeSnapshot()');
+    getScreenshots() {
+        return this.browser.executeScript('return agarioDriver.getSnapshots()');
     }
 
     moveMouse(coords) {

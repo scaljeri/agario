@@ -159,14 +159,14 @@ describe('Heartbeat:', () => {
     });
 
     describe('#start', () => {
-        let clock, tick, innerCb, timeoutSpy, startPromise,
+        let clock, spyTick, innerCb, timeoutSpy, startPromise,
             promise = () => {
             };
 
         beforeEach(() => {
             clock = sinon.useFakeTimers();
 
-            tick = sinon.stub(beat, 'tick').returns({
+            spyTick = sinon.stub(beat, 'tick').returns({
                 then: (cb) => {
                     innerCb = cb;
                     return promise;
@@ -179,12 +179,12 @@ describe('Heartbeat:', () => {
         });
 
         afterEach(() => {
-            tick.restore();
+            spyTick.restore();
             clock.restore();
         });
 
         it('should start a tick', () => {
-            tick.should.have.been.called;
+            spyTick.should.have.been.called;
             beat.isBusy.should.be.ok;
         });
 
@@ -195,7 +195,7 @@ describe('Heartbeat:', () => {
         it('should not start a new tick if still busy', () => {
             beat.start();
 
-            tick.should.have.been.calledOnce;
+            spyTick.should.have.been.calledOnce;
         });
 
         it('should be be ready for the next tick if promise resolves', () => {
@@ -209,7 +209,7 @@ describe('Heartbeat:', () => {
 
             timeoutSpy.should.have.been.calledOnce;
             timeoutSpy.args[0][0].should.be.instanceOf(Function);
-            timeoutSpy.args[0][1].should.equal(50);
+            timeoutSpy.args[0][1].should.equal(0);
         });
 
         it('should schedule immidiatly if tick took longer than a frame', () => {

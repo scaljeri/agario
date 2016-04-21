@@ -17,11 +17,12 @@ import Screen from './screen';
     di.register('screen', Screen, ['diPixelFactory'], {singleton: true});
 
     // Define global function
-    ns.takeScreenshot = (stride = 1) => {
-        return di.getInstance('screen').takeScreenshot(stride);
+    ns.getSnapshots = (stride = 1) => {
+        return screen.flush(stride);
     };
 
     ns.play = () => {
+        di.getInstance('screen').setup();
         di.getInstance('play').start();
     };
 })(window.agarioDriver = {});

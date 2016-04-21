@@ -7,6 +7,7 @@ import DI from 'javascript-dependency-injection';
 import Facebook from './src/backend/facebook';
 import Image from './src/backend/image';
 import MainPage from './src/backend/pages/main-page';
+import GamePage from './src/backend/pages/game-page';
 import Snapshots from './src/backend/snapshots';
 import SettingsPage from './src/backend/pages/settings-page';
 
@@ -28,16 +29,18 @@ class Driver {
 
         di.register('facebook', Facebook, [], {singletomn: true});
         di.register('heartbeat', Heartbeat, [], {singletomn: true});
-        di.register('image', Heartbeat, [], {singletomn: true});
+        di.register('image', Image, [], {singletomn: true});
         di.register('mainPage', MainPage, [], {singleton: true});
+        di.register('gamePage', GamePage, [this.settings], {singleton: true});
         di.register('settingsPage', SettingsPage, [], {singleton: true});
         di.register('snapshots', Snapshots, ['heartbeat', 'image'], {singletomn: true});
 
         this.setup().then(() => {
-                if (this.settings.snapshots) { // Human play with snapshots
-                    return di.getInstance('snapshots').start();
+                if (this.settings.snapshots) { // Human play with snapshots (char `t` to take snapshot)
+                    return di.getInstance('gamePage').start()
+                        .then(() => di.getInstance('snapshots').start());
                 } else { // Bot play
-                    // Lets play!!!
+                    return di.get('gamePage').start();
                 }
             })
             .then(() => di.getInstance('mainPage').close());
