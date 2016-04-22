@@ -1,3 +1,5 @@
+import { isNumber } from './utils';
+
 let callbacks, counter, fps, isBusy;
 
 const FPS = 10;
@@ -25,6 +27,10 @@ export default class Heartbeat {
         counter = 0;
         isBusy = false;
 
+        if (this.timeoutId) {
+            clearTimeout(this.timeoutId);
+        }
+
         return this;
     }
 
@@ -42,7 +48,7 @@ export default class Heartbeat {
      * @param {Number} input - Frames per second
      */
     set fps(input) {
-        if (!isNaN(parseFloat(input)) && isFinite(input)) {
+        if (isNumber(input)) {
             fps = input;
         }
     }
@@ -102,10 +108,10 @@ export default class Heartbeat {
             this.promise = this.tick().then(() => {
                 // Prepare next tick
                 let diff = Math.max(Date.now() - startTime, 1),
-                    fdrops = Math.floor(diff / fps);
+                    fdrops = Math.floor(diff / (fps * 10));
 
                 isBusy = false;
-                this.timeoutId = setTimeout(::this.start, Math.max(0, fps - diff - fps * fdrops));
+                this.timeoutId = setTimeout(::this.start, Math.max(0, 1000/fps - diff - 1000/fps * fdrops));
             });
         }
 
@@ -114,6 +120,7 @@ export default class Heartbeat {
 
     stop() {
         if (this.timeoutId) {
+            console.log("STOP " + this.timeoutId);
             clearTimeout(this.timeoutId);
         }
 

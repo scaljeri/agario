@@ -13,21 +13,13 @@ let should = chai.should();
 
 
 describe('Heartbeat:', () => {
-    let beat = new Heartbeat(),
-        origSetTimeout;
+    let beat = new Heartbeat();
 
     beforeEach(() => {
         beat.reset(); // Need to reset the singleton each run
-        origSetTimeout = setTimeout;
-        setTimeout = () => {
-        };
     });
 
-    afterEach(() => {
-        setTimeout = origSetTimeout;
-    });
-
-    /*
+    /* Left here as reference
     it('should not be possible to create a new instance', () => {
         (() => {
             new Heartbeat();
@@ -159,32 +151,31 @@ describe('Heartbeat:', () => {
     });
 
     describe('#start', () => {
-        let clock, spyTick, innerCb, timeoutSpy, startPromise,
-            promise = () => {
-            };
+        let clock, stubTick, innerCb, startPromise, spyTimeout,
+            promise = () => {};
 
         beforeEach(() => {
             clock = sinon.useFakeTimers();
 
-            spyTick = sinon.stub(beat, 'tick').returns({
+            stubTick = sinon.stub(beat, 'tick').returns({
                 then: (cb) => {
                     innerCb = cb;
                     return promise;
                 }
             });
+            spyTimeout = sinon.spy(global, 'setTimeout');
 
-            timeoutSpy = sinon.stub(global, 'setTimeout').returns(null);
-            startPromise = beat.start();
-            clock.tick(50);
+            startPromise = beat.start(); // `tick` is called
+            clock.tick(50);              // for 50ms
         });
 
         afterEach(() => {
-            spyTick.restore();
+            stubTick.restore();
             clock.restore();
         });
 
         it('should start a tick', () => {
-            spyTick.should.have.been.called;
+            stubTick.should.have.been.called;
             beat.isBusy.should.be.ok;
         });
 
@@ -192,13 +183,17 @@ describe('Heartbeat:', () => {
             promise.should.equals(startPromise);
         });
 
+        it('should have the busy state', () => {
+            beat.isBusy.should.be.ok;
+        });
+
         it('should not start a new tick if still busy', () => {
             beat.start();
 
-            spyTick.should.have.been.calledOnce;
+            stubTick.should.have.been.calledOnce;
         });
 
-        it('should be be ready for the next tick if promise resolves', () => {
+        it('should be ready for the next tick if promise resolves', () => {
             innerCb();
 
             beat.isBusy.should.not.be.ok;
@@ -207,35 +202,35 @@ describe('Heartbeat:', () => {
         it('should schedule the next tick', () => {
             innerCb();
 
-            timeoutSpy.should.have.been.calledOnce;
-            timeoutSpy.args[0][0].should.be.instanceOf(Function);
-            timeoutSpy.args[0][1].should.equal(0);
+            spyTimeout.should.have.been.calledOnce;
+            spyTimeout.args[0][0].should.be.instanceOf(Function);
+            spyTimeout.args[0][1].should.equal(50);
         });
 
         it('should schedule immidiatly if tick took longer than a frame', () => {
             clock.tick(51);
             innerCb();
 
-            timeoutSpy.should.have.been.calledOnce;
-            timeoutSpy.args[0][0].should.be.instanceOf(Function);
-            timeoutSpy.args[0][1].should.equal(0);
+            spyTimeout.should.have.been.calledOnce;
+            spyTimeout.args[0][0].should.be.instanceOf(Function);
+            spyTimeout.args[0][1].should.equal(0);
         });
     });
 
     describe('#stop', () => {
-        let innerCb, spy, tick, promise = () => {
+        let innerCb, spyClearTimeout, spyTimeout, stubTick, promise = () => {
         };
 
         beforeEach(() => {
-            tick = sinon.stub(beat, 'tick').returns({
+            stubTick = sinon.stub(beat, 'tick').returns({
                 then: (cb) => {
                     innerCb = cb;
                     return promise;
                 }
             });
 
-            spy = sinon.stub(global, 'clearTimeout').returns(null);
-            sinon.stub(global, 'setTimeout').returns(9);
+            spyTimeout = sinon.stub(global, 'setTimeout').returns(9);
+            spyClearTimeout = sinon.stub(global, 'clearTimeout').returns(null);
 
             beat.start();
             innerCb();
@@ -244,13 +239,14 @@ describe('Heartbeat:', () => {
         });
 
         afterEach(() => {
-            tick.restore();
-            spy.restore();
+            stubTick.restore();
+            spyClearTimeout.restore();
+            spyTimeout.restore();
         });
 
         it('should clear the scheduled tick', () => {
-            spy.should.have.been.calledOnce;
-            spy.args[0][0].should.equal(9);
+            spyClearTimeout.should.have.been.calledOnce;
+            spyClearTimeout.args[0][0].should.equal(9);
         });
 
         it('should not be busy', () => {
