@@ -16,12 +16,15 @@ import isNumber from './utils';
  */
 export default class Pixels {
     /**
-     * @constructor
+     * Accepts an ndarray or its separate values (same as #set)
+     *
+     * @param {Array | ndarray} pixels - List of pixels or ndarray
+     * @param {Number} height - Height of the image
+     * @param {Number} width - Width of the image
+     * @param {Number} stride - Stride of the pixel array
      */
     constructor(pixels, height, width, stride) {
-        if (pixels) {
-            this.set(pixels, height, width, stride);
-        }
+        this.set(pixels, height, width, stride);
     }
 
     /**
@@ -82,11 +85,19 @@ export default class Pixels {
      * @returns {Object} this
      */
     set(pixels, height, width, stride) {
-        this._width  = width;
-        this._height = height;
-        this._pixels = pixels;
-        this._stride = stride || pixels.length / (width * height); // Expect 1, 2 or 4
-        this._blShift = Math.floor(this._stride/2);                //  Bitwise left shift value;
+        if (pixels.data) {
+            this._pixels = pixels.data;
+            this._width  = pixels.shape[0];
+            this._height = pixels.shape[1];
+            this._stride = pixels.stride[0];
+        }  else {
+            this._width  = width;
+            this._height = height;
+            this._pixels = pixels;
+            this._stride = stride || pixels.length / (width * height); // Expect 1, 2 or 4
+        }
+
+        this._blShift = Math.floor(this._stride / 2);                  //  Bitwise left shift value;
 
         return this;
     }

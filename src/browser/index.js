@@ -18,11 +18,12 @@ import Screen from './screen';
 
     // Define global function
     ns.getSnapshots = (stride = 1) => {
-        return screen.flush(stride);
+        return di.getInstance('screen').flush(stride);
     };
 
     ns.play = () => {
-        di.getInstance('screen').setup();
         di.getInstance('play').start();
     };
+
+    di.getInstance('screen'); // Inititalize singleton
 })(window.agarioDriver = {});

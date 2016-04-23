@@ -2,7 +2,8 @@ import fs from 'fs';
 import Base from './base-page';
 
 const BTN_FB = '.btn-play',
-    BTN_GUEST = '.btn-play-guest';
+    BTN_GUEST = '.btn-play-guest',
+    NS = 'agarioDriver';
 
 export default class GamePage extends Base {
     constructor(options) {
@@ -34,12 +35,16 @@ export default class GamePage extends Base {
                 });
     }
 
-    getMouseCoords() {
-        return this.browser.executeScript('return bOt.analyse()');
+    remote(func) {
+        return this.browser.executeScript(`return ${NS}.${func}`);/*
+            .then((data) => {
+                return data;
+            });*/
     }
 
-    getScreenshots() {
-        return this.browser.executeScript('return agarioDriver.getSnapshots()');
+    /*
+    getMouseCoords() {
+        return this.browser.executeScript('return bOt.analyse()');
     }
 
     moveMouse(coords) {
@@ -47,5 +52,5 @@ export default class GamePage extends Base {
             .then((canvas) => {
                 this.as.mouseMove(canvas, coords).click().perform();
             });
-    }
+    } */
 }

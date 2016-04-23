@@ -1,12 +1,12 @@
 import Promise from 'promise';
 
 export default class Snapshots {
-    constructor(heartbeat, image, dir = './snapshots') {
-        this._dir = dir;
+    constructor(gamePage, heartbeat, image) {
+        this._gamePage = gamePage;
         this._heartbeat = heartbeat;
         this._image = image;
 
-        heartbeat.fps = 1000; // Pull screenshots every second
+        heartbeat.fps = 1; // Pull screenshots once per second
         heartbeat.on('snaptshots', ::this.getSnapshots);
 
         // TODO: Setup heartbeat
@@ -17,13 +17,18 @@ export default class Snapshots {
             this._resolve = resolve;
             this._reject = reject;
 
-            this.count = 0;
             this._heartbeat.start();
         });
     }
 
     getSnapshots() {
-        console.log("pull screenshots " + (++this.count));
+        console.log('before');
+        return this._gamePage.remote('getSnapshots()')
+            .then((data) => {
+                data.forEach(screenshot => {
+                    this._image.set(screenshot).save();
+                });
+            });
     }
 
     takeSnapshot() {
