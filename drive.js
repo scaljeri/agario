@@ -27,20 +27,20 @@ class Driver {
     constructor() {
         this.parseArgvs();
 
-        di.register('facebook', Facebook, [], {singletomn: true});
-        di.register('heartbeat', Heartbeat, [], {singletomn: true});
-        di.register('image', Image, [], {singletomn: true});
+        di.register('facebook', Facebook, [], {singleton: true});
+        di.register('heartbeat', Heartbeat, [], {singleton: true});
+        di.register('image', Image, [this.settings.snapshots], {singleton: true});
         di.register('mainPage', MainPage, [], {singleton: true});
         di.register('gamePage', GamePage, [this.settings], {singleton: true});
         di.register('settingsPage', SettingsPage, [], {singleton: true});
-        di.register('snapshots', Snapshots, ['heartbeat', 'image'], {singletomn: true});
+        di.register('snapshots', Snapshots, ['gamePage', 'heartbeat', 'image'], {singleton: true});
 
         this.setup().then(() => {
                 if (this.settings.snapshots) { // Human play with snapshots (char `t` to take snapshot)
                     return di.getInstance('gamePage').start()
                         .then(() => di.getInstance('snapshots').start());
                 } else { // Bot play
-                    return di.get('gamePage').start();
+                    return di.getInstance('gamePage').start();
                 }
             })
             .then(() => di.getInstance('mainPage').close());
