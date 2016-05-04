@@ -7,7 +7,7 @@ export default class Snapshots {
         this._image = image;
 
         heartbeat.fps = 1; // Pull screenshots once per second
-        heartbeat.on('snaptshots', ::this.getSnapshots);
+        heartbeat.on('snapshots', ::this.getSnapshots);
     }
 
     getSnapshots() {

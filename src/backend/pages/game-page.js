@@ -21,7 +21,7 @@ export default class GamePage extends Base {
         return this.findElement(this.options.facebook ? BTN_FB : BTN_GUEST)
             .then(
                 (element) => {
-                    element.isDisplayed()
+                    return element.isDisplayed()
                         .then((state) => {
                             if (state) {
                                 return element.click();

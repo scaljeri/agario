@@ -40,13 +40,13 @@ class Driver {
                     return di.getInstance('gamePage').start()
                         .then(() => {
                             di.getInstance('snapshots');
-                            //di.getInstance('hearbeat')
+                            return di.getInstance('heartbeat').start();
                         });
                 } else { // Bot play
                     return di.getInstance('gamePage').start();
                 }
-            })
-            .then(() => di.getInstance('mainPage').close());
+            });
+            //.then(() => di.getInstance('mainPage').close());
     }
 
     parseArgvs() {
