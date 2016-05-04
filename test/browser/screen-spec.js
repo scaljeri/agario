@@ -11,7 +11,7 @@ chai.should();
 chai.use(sinonChai);
 
 describe('Screen:', () => {
-    let screen, spyAddEventListener, spyImageData, spyContext, spySelector,
+    let screen, spyAddEventListener, spyImageData, spyContext, spySelector, spyTakeSnapshot,
         getImageData = () => ({data: dummyPixels.pixels}),
         getContext = () => ({getImageData: getImageData}),
         addEventListener = () => {};
@@ -22,6 +22,9 @@ describe('Screen:', () => {
         spyImageData = sinon.spy(getImageData);
 
         global.document = {
+            body: {
+                addEventListener: spyAddEventListener
+            },
             querySelector: () => {
                 return {
                     addEventListener: spyAddEventListener,
@@ -33,36 +36,50 @@ describe('Screen:', () => {
         };
         spySelector = sinon.spy(global.document, 'querySelector');
 
-        screen = new Screen(dummyPixelFactor).setup();
+        screen = new Screen(dummyPixelFactor);
+        //spyTakeSnapshot = sinon.spy(screen, 'takeScreenshot');
     });
 
-    describe('#setup', () => {
-        it('should have selected the canvas', () => {
+    describe('#constructor', () => {
+        it('should listen to keydown events', () => {
+            spyAddEventListener.args[0][0].should.equal('keydown');
+        });
+    });
+
+    describe('#calibrate', () => {
+        beforeEach(() => {
+            screen.calibrate();
+        });
+
+        it('should query the canvas', () => {
             spySelector.should.have.been.calledWith('#canvas');
         });
 
         it('should have retrieved tha canvas context', () => {
             spyContext.should.have.been.calledWith('2d');
         });
-
-        it('should have selected the canvas', () => {
-            screen._ctx.should.be.defined;
-        });
-
-        it('should listen to keydown events', () => {
-            spyAddEventListener.args[0][0].should.equal('keydown');
-        });
     });
-
     describe('#takeScreenshot', () => {
-        let spyGetInstance;
+        let spyGetInstance, spyCalibrate;
 
         beforeEach(() => {
             spyGetInstance = sinon.spy(dummyPixelFactor, 'getInstance');
+            spyCalibrate = sinon.spy(screen, 'calibrate');
         });
 
         afterEach(() => {
             spyGetInstance.restore();
+        });
+
+        it('should initialize using #calibrate', () => {
+            screen.takeScreenshot();
+            spyCalibrate.should.have.been.called;
+        });
+
+        it('should initialize only once using #calibrate', () => {
+            screen.takeScreenshot();
+            screen.takeScreenshot();
+            spyCalibrate.should.have.been.called.once;
         });
 
         it('should instantiate a pixel with pixel data', () => {

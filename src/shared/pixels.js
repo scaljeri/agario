@@ -24,7 +24,9 @@ export default class Pixels {
      * @param {Number} stride - Stride of the pixel array
      */
     constructor(pixels, height, width, stride) {
-        this.set(pixels, height, width, stride);
+        if (pixels) {
+            this.set(pixels, height, width, stride);
+        }
     }
 
     /**

@@ -38,7 +38,10 @@ class Driver {
         this.setup().then(() => {
                 if (this.settings.snapshots) { // Human play with snapshots (char `t` to take snapshot)
                     return di.getInstance('gamePage').start()
-                        .then(() => di.getInstance('snapshots').start());
+                        .then(() => {
+                            di.getInstance('snapshots');
+                            //di.getInstance('hearbeat')
+                        });
                 } else { // Bot play
                     return di.getInstance('gamePage').start();
                 }
