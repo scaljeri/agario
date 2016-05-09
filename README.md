@@ -41,7 +41,9 @@ JSON file holds your facebook credentials and should look like the following
         password: "foo123"
     }
     
-    $> ./driver.js --snapshots
+and the CLI
+    
+    $> ./driver.js --facebook
 
 ### [--snapshots=output_dir]
 This options let you take screenshots while playing the game manually
