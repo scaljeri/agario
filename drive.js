@@ -33,20 +33,26 @@ class Driver {
         di.register('mainPage', MainPage, [], {singleton: true});
         di.register('gamePage', GamePage, [this.settings], {singleton: true});
         di.register('settingsPage', SettingsPage, [], {singleton: true});
-        di.register('snapshots', Snapshots, ['gamePage', 'heartbeat', 'image'], {singleton: true});
+        di.register('snapshots', Snapshots, ['gamePage', 'image'], {singleton: true});
 
         this.setup().then(() => {
                 if (this.settings.snapshots) { // Human play with snapshots (char `t` to take snapshot)
                     return di.getInstance('gamePage').start()
                         .then(() => {
-                            di.getInstance('snapshots');
-                            return di.getInstance('heartbeat').start();
+                            let heartbeat = di.getInstance('heartbeat')
+                                .on('snapshot', ::(di.getInstance('snapshots')).getSnapshots)
+                                .start(1);
+
+                            let promise = di.getInstance('snapshots').promise;
+                            di.getInstance('heartbeat').start();
+
+                            return promise;
                         });
                 } else { // Bot play
                     return di.getInstance('gamePage').start();
                 }
-            });
-            //.then(() => di.getInstance('mainPage').close());
+            })
+            .then(() => di.getInstance('mainPage').close());
     }
 
     parseArgvs() {

@@ -36,7 +36,7 @@ export default class GamePage extends Base {
     }
 
     remote(func) {
-        return this.browser.executeScript(`return ${NS}.${func}`);/*
+        return this.browser.executeScript(`return ${NS}.${func}()`);/*
             .then((data) => {
                 return data;
             });*/

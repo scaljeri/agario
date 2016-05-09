@@ -5,14 +5,15 @@ export default class Snapshots {
         this._gamePage = gamePage;
         this._heartbeat = heartbeat;
         this._image = image;
+    }
 
-        heartbeat.fps = 1; // Pull screenshots once per second
-        heartbeat.on('snapshots', ::this.getSnapshots);
+    get promise() {
+        // TODO: Detect browser close
+        return new Promise(() => {});
     }
 
     getSnapshots() {
-        console.log('before');
-        return this._gamePage.remote('getSnapshots()')
+        return this._gamePage.remote('getSnapshots')
             .then((data) => {
                 data.forEach(screenshot => {
                     this._image.set(screenshot).save();

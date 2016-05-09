@@ -100,7 +100,9 @@ export default class Heartbeat {
         return this;
     }
 
-    start() {
+    start(newFps) {
+        this.fps = newFps;
+
         if (!isBusy) {
             let startTime = Date.now();
             isBusy = true;
