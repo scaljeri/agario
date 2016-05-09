@@ -32,12 +32,27 @@ To checkout the code-coverage report
 There are many command-line-options available which I will explain next
 
 ### --facebook
+Before using this option make sure you have a file called `facebook.json`. This
+JSON file holds your facebook credentials and should look like the following
 
-### --snapshots
-
-    $> ./driver.js
+    {
+        username: "bar"
+        password: "foo123"
+    }
     
-TODO: 
+    $> ./driver.js --snapshots
+
+### [--snapshots=output_dir]
+This options let you take screenshots while playing the game manually
+
+    $> ./driver.js --snapshots
+    
+Hit `t` to take a snapshot which will be written into ./snapshots
+Or if you would like to change the output directory 
+
+    $> ./driver.js --snapshots ./screenshots
+
+If the directory does not exists it will create for you.
     
 
 
