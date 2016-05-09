@@ -2,32 +2,49 @@
 
 [![Join the chat at https://gitter.im/scaljeri/agario-driver](https://badges.gitter.im/scaljeri/agario-driver.svg)](https://gitter.im/scaljeri/agario-driver?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-This project manages the environment for an agar.io 
-[bot](https://github.com/scaljeri/agario-bot) game play. 
+The goal of this project is twofold:
 
-This project provides the following:
+    1) Manage the environment for an agar.io bot game play
+        * Facebook login
+        * black and white and low res setup
+        * Start/stop the game  (restart on game-over)
+        * Shared libraries for agar.io bots in general
+    2) A bot implementation
 
-   * Facebook login
-   * black and white and low res setup
-   * Start/stop the game  (restart on game-over if required)
-   * Shared libraries for bots
-   
 The basis for endless bot play :)
 
-The process of creating a bot goes as follows: 
+## Setup
 
-    * Clone [this](https://github.com/scaljeri/agario-bot) 
-    * Bundle
-    * ....
+    $> git clone https://github.com/scaljeri/agario-driver.git
+    $> cd agario-driver
+    $> npm install
     
-TODO
+## Testing
+All code is tested except for the page objects. To run the tests do
 
-The bot software (together with some agario-driver libs) will be injected into the browser. The agario-driver libs take care of the communication between the browser and the backend 
-[Webdriver](http://www.seleniumhq.org/projects/webdriver/) 
+    $> npm test
+    
+To checkout the code-coverage report 
+
+    $> open coverage/lcov-report/index.html
+    
+## Commandline arguments
+There are many command-line-options available which I will explain next
+
+### --facebook
+
+### --snapshots
+
+    $> ./driver.js
+    
+TODO: 
+    
 
 
-## Backend - Frontend communication
 
+
+
+TODO ------------
 
 ## Chromedriver
 
