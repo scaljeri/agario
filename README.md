@@ -46,7 +46,7 @@ and the CLI
     $> ./driver.js --facebook
 
 ### [--snapshots=output_dir]
-This options let you take screenshots while playing the game manually
+This option enables you to take screenshots while playing the game manually
 
     $> ./driver.js --snapshots
     
@@ -56,7 +56,7 @@ Or if you would like to change the output directory
     $> ./driver.js --snapshots ./screenshots
 
 If the directory does not exists it will create for you.
-    
+These screenshots can be used to test and improve your bot if necessary.
 
 
 
