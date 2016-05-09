@@ -18,6 +18,7 @@ The basis for endless bot play :)
     $> git clone https://github.com/scaljeri/agario-driver.git
     $> cd agario-driver
     $> npm install
+    $> npm run bundle
     
 ## Testing
 All code is tested except for the page objects. To run the tests do
