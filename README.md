@@ -30,7 +30,7 @@ To checkout the code-coverage report
     $> open coverage/lcov-report/index.html
     
 ## Commandline arguments
-There are many command-line-options available which I will explain next
+There are many command-line-options available which I will explain below
 
 ### --facebook
 Before using this option make sure you have a file called `facebook.json`. This
