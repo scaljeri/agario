@@ -50,12 +50,12 @@ This option enables you to take screenshots while playing the game manually
 
     $> ./driver.js --snapshots
     
-Hit `t` to take a snapshot which will be written into ./snapshots
-Or if you would like to change the output directory 
+Hit `t` to take a snapshot which will be written into the `./snapshots` folder.
+If you would like to change the output directory 
 
     $> ./driver.js --snapshots ./screenshots
 
-If the directory does not exists it will create for you.
+If the directory does not exists it will be create for you.
 These screenshots can be used to test and improve your bot if necessary.
 
 
