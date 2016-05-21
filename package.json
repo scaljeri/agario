@@ -53,7 +53,5 @@
     "victor": "^1.1.0",
     "watchify": "^3.7.0"
   },
-  "dependencies": {
-    "esdoc-es7-plugin": "0.0.3"
-  }
+  "dependencies": {}
 }
