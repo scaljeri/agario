@@ -1,14 +1,19 @@
 import webdriver from 'selenium-webdriver';
+import chrome  from 'selenium-webdriver/chrome';
 
 let browser;
 
 export default class BasePage {
     static get browser() {
         if (!browser) {
-            browser = new webdriver.Builder().usingServer().withCapabilities({
-                'browserName': 'chrome',
-                'reuse_browser': false
-            }).build();
+            // The options below are needed to prevent the following security error:
+            //    Failed tp execute 'getImageData' on CanvasRenderingContext2D:
+            //    The canvas has been tainted by cross-origin data.
+            let options = new chrome.Options();
+            options.addArguments(['--disable-web-security', '--user-data-dir']);
+
+            browser = new webdriver.Builder().
+                withCapabilities(options.toCapabilities()).build();
         }
 
         return browser;
