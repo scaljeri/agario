@@ -29,12 +29,16 @@ export default class Screen {
         return buffer;
     }
 
+    getPixelArray() {
+        return this._ctx.getImageData(0, 0, this._width, this._height).data;
+    }
+
     takeScreenshot(stride = 1) {
         if (!this._ctx) {
             this.calibrate();
         }
 
-        let data = this._ctx.getImageData(0, 0, this._width, this._height).data,
+        let data = this.getPixelArray(),
             buffer = this._pixelFactory.getInstance(data, this._height, this._width, 4)
                 .ndarray(stride);
 

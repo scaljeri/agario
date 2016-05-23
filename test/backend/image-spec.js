@@ -46,10 +46,12 @@ describe('Image:', () => {
     });
 
     describe('#save', () => {
+        let dirname = './dir', filename = 'screenshot.png';
+
         beforeEach(() => {
             mock({});
-            image = new Image('./dir');
-            spy = sinon.stub(image, 'filename').returns('screenshot.png');
+            image = new Image(dirname);
+            spy = sinon.stub(image, 'filename').returns(filename);
 
             image.set(dummyPixels.pixels, dummyPixels.height, dummyPixels.width, 4)
                  .save()
@@ -60,7 +62,7 @@ describe('Image:', () => {
         });
 
         it('should create an image', () => {
-            fs.lstatSync('./dir/screenshot.png').isFile().should.be.ok;
+            fs.lstatSync(`${dirname}/${filename}`).isFile().should.be.ok;
         });
     });
 });
