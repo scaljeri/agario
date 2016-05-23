@@ -27,6 +27,7 @@ class Driver {
     constructor() {
         this.parseArgvs();
 
+        // Setup dependency injection
         di.register('facebook', Facebook, [], {singleton: true});
         di.register('heartbeat', Heartbeat, [], {singleton: true});
         di.register('image', Image, [this.settings.snapshots], {singleton: true});
