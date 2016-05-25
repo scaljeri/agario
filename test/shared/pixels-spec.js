@@ -105,6 +105,71 @@ describe('Pixels:', () => {
         });
     });
 
+    describe('#iterator', () => {
+        let item, iter;
+
+        describe('With default stride (4)', () => {
+            beforeEach(() => {
+                iter = pixels.iterator();
+            });
+
+            it('should return the correct values', () => {
+                iter.next().value.should.equals(0);
+                iter.next().value.should.equals(4);
+                iter.next().value.should.equals(8);
+            });
+
+            it('should be done after data.length/4 values', () => {
+                for(let i = 0; i < data.pixels.length; i+= 4) {
+                    item = iter.next();
+
+                    item.done.should.not.be.ok;
+                    item.value.should.be.a.number;
+                }
+
+                iter.next().done.should.be.ok;
+            });
+        });
+
+
+        describe('With a stride of 2', () => {
+            beforeEach(() => {
+                pixels.set(data.pixels, data.width, data.height, 2);
+                iter = pixels.iterator();
+            });
+
+            it('should be done after data.length/2 values', () => {
+                for(let i = 0; i < data.pixels.length; i+= 2) {
+                    item = iter.next();
+
+                    item.done.should.not.be.ok;
+                    item.value.should.be.a.number;
+                }
+
+                iter.next().done.should.be.ok;
+            });
+        });
+
+        describe('With a stride of 1', () => {
+            beforeEach(() => {
+                pixels.set(data.pixels, data.width, data.height, 1);
+                iter = pixels.iterator();
+            });
+
+            it('should be done after data.length values', () => {
+                for(let i = 0; i < data.pixels.length; i++) {
+                    item = iter.next();
+
+                    item.done.should.not.be.ok;
+                    item.value.should.be.a.number;
+                }
+
+                iter.next().done.should.be.ok;
+            });
+
+        });
+    });
+
     describe('#get', () => {
         it('should return the correct values given x and y', () => {
             pixels.get(0, 0).should.equals(0);
@@ -137,6 +202,6 @@ describe('Pixels:', () => {
                 pixels.get(0, 1).should.equals(9);
                 pixels.get(1, 1).should.equals(10);
             });
-        })
+        });
     })
 });

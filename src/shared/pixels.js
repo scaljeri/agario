@@ -30,6 +30,15 @@ export default class Pixels {
     }
 
     /**
+     * Stride based iterator
+     */
+    *iterator() {
+        for(let i = 0; i < this._pixels.length; i+= this.stride) {
+            yield this._pixels[i];
+        }
+    }
+
+    /**
      * Access the RGBA array by `x` and `y`
      *
      * @param {Numer} x
