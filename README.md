@@ -13,6 +13,10 @@ The goal of this project is twofold:
 
 The basis for endless bot play :)
 
+## Project status
+Currently the focus is on image processing. After that the bot will be 
+be built
+
 ## Setup
 
     $> git clone https://github.com/scaljeri/agario-driver.git
