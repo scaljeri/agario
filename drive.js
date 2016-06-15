@@ -15,7 +15,9 @@ import Test from './src/backend/test';
 // List of all CLI arguments
 const ARGVS = [
     'bundle',       // The bundle to be injected in the browser (bot)
-    'dry',          // local bot testing amd defines a input screendump
+    'bot',          // Define the bot js file
+    'dry',          // local testing (example: --dry=./screendumps/nDns.png) and can be used
+                    // together with --bot
     'facebook',     // facebook login
     'fps',          // set game loop speed
     'snapshots'     // enable snapshots (human play)
@@ -36,7 +38,6 @@ class Driver {
     constructor() {
         let args = this.parseArgvs(),
             drive;
-
 
         if (args.dry) {
             drive = new Test(args);

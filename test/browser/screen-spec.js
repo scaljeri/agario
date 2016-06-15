@@ -98,5 +98,9 @@ describe('Screen:', () => {
         it('should return a ndarray with a stride of 4', () => {
             screen.takeScreenshot(4).should.equal(4);
         });
-    })
+    });
+
+    describe('#flush', () => {
+
+    });
 });

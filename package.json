@@ -46,6 +46,7 @@
     "mocktail": "^0.3.8",
     "ndarray": "^1.0.18",
     "numeric": "^1.2.6",
+    "pngjs": "^2.3.1",
     "promise": "^7.1.1",
     "save-pixels": "^2.3.0",
     "selenium-webdriver": "^2.53.1",
