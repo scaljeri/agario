@@ -39,7 +39,7 @@
     "esdoc-es7-plugin": "0.0.3",
     "fs-promise": "^0.5.0",
     "isparta": "^4.0.0",
-    "javascript-dependency-injection": "git://github.com/scaljeri/javascript-dependency-injection.git",
+    "javascript-dependency-injection": "^2.0.0-beta.11",
     "mocha": "^2.4.5",
     "mock-fs": "^3.8.0",
     "mocktail": "^0.3.8",

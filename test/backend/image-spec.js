@@ -4,24 +4,37 @@ import chaiAsPromised from 'chai-as-promised';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
+import DI from 'javascript-dependency-injection';
+
+import dummyPixels from '../fixtures/dummy-pixels';
+import Image from '../../src/backend/image';
+
 chai.use(chaiAsPromised);
 chai.should();
 chai.use(sinonChai);
 
 let should = chai.should();
+let di = new DI();
 
-import mock from 'mock-fs';
-import fs from 'fs';
-
-import dummyPixels from '../fixtures/dummy-pixels';
-import Image from '../../src/backend/image';
 
 
 describe('Image:', () => {
-    let image, spy;
+    let image, spy,
+        fs = {
+            createWriteStream: () => {},
+            existsSync: () => {},
+            mkdirSync: () => {}
+        },
+        pixelsRetVal = {
+            pipe: () => {}
+        },
+        savePixels = () => {
+            return pixelsRetVal;
+        };
 
     beforeEach(() => {
-        image = new Image();
+        di.register('$image', Image, [fs, () => {}, savePixels]);
+        image = di.getInstance('$image');
     });
 
     describe('#filename', () => {
@@ -46,23 +59,21 @@ describe('Image:', () => {
     });
 
     describe('#save', () => {
-        let dirname = './dir', filename = 'screenshot.png';
+        let spyFs, spyPipe, dirname = './dir', filename = 'screenshot.png';
 
         beforeEach(() => {
-            mock({});
-            image = new Image(dirname);
+            image = di.getInstance('$image', dirname);
             spy = sinon.stub(image, 'filename').returns(filename);
+            spyFs = sinon.stub(fs, 'createWriteStream').returns('stream');
+            spyPipe = sinon.spy(pixelsRetVal, 'pipe');
 
             image.set(dummyPixels.pixels, dummyPixels.height, dummyPixels.width, 4)
                  .save()
         });
 
-        afterEach(() => {
-            mock.restore();
-        });
-
         it('should create an image', () => {
-            fs.lstatSync(`${dirname}/${filename}`).isFile().should.be.ok;
+            fs.createWriteStream.should.have.been.calledWith(`${dirname}/${filename}`);
+            spyPipe.should.have.been.calledWith('stream');
         });
     });
 });

@@ -1,6 +1,8 @@
-#!./node_modules/.bin/babel-node
-
+import fs from 'fs';
+import ndarray from 'ndarray';
+import savePixels from 'save-pixels';
 import DI from 'javascript-dependency-injection';
+
 
 // Backend
 import Facebook from './facebook';
@@ -21,15 +23,15 @@ export default class Play {
         let di = new DI();
 
         this.settings = settings;
-        
+
         // Setup dependency injection
-        di.register('facebook', Facebook, [], {singleton: true});
-        di.register('heartbeat', Heartbeat, [], {singleton: true});
-        di.register('image', Image, [settings.snapshots], {singleton: true});
-        di.register('mainPage', MainPage, [], {singleton: true});
-        di.register('gamePage', GamePage, [settings], {singleton: true});
-        di.register('settingsPage', SettingsPage, [], {singleton: true});
-        di.register('snapshots', Snapshots, ['gamePage', 'image'], {singleton: true});
+        di.register('$facebook', Facebook, [], {singleton: true});
+        di.register('$heartbeat', Heartbeat, [], {singleton: true});
+        di.register('$image', Image, [fs, ndarray, savePixels, settings.snapshots], {singleton: true});
+        di.register('$mainPage', MainPage, [], {singleton: true});
+        di.register('$gamePage', GamePage, [settings], {singleton: true});
+        di.register('$settingsPage', SettingsPage, [], {singleton: true});
+        di.register('$snapshots', Snapshots, ['$gamePage', '$image'], {singleton: true});
 
         this._di = di;
     }
@@ -40,33 +42,33 @@ export default class Play {
         return this.setup()
             .then(() => {
                 if (this.settings.snapshots) { // Human play with snapshots (char `t` to take snapshot)
-                    return di.getInstance('gamePage').start()
+                    return di.getInstance('$gamePage').start()
                         .then(() => {
-                            let heartbeat = di.getInstance('heartbeat')
-                                .on('snapshot', ::(di.getInstance('snapshots')).getSnapshots)
+                            let heartbeat = di.getInstance('$heartbeat')
+                                .on('snapshot', ::(di.getInstance('$snapshots')).getSnapshots)
                                 .start(1);
 
-                            let promise = di.getInstance('snapshots').promise;
-                            di.getInstance('heartbeat').start();
+                            let promise = di.getInstance('$snapshots').promise;
+                            di.getInstance('$heartbeat').start();
 
                             return promise;
                         });
                 } else { // Bot play
-                    return di.getInstance('gamePage').start();
+                    return di.getInstance('$gamePage').start();
                 }
             })
-            .then(() => di.getInstance('mainPage').close());
+            .then(() => di.getInstance('$mainPage').close());
     }
 
     setup() {
         let di = this._di,
-            settingsPage = di.getInstance('settingsPage'),
-            mainPage = di.getInstance('mainPage');
+            settingsPage = di.getInstance('$settingsPage'),
+            mainPage = di.getInstance('$mainPage');
 
         return mainPage.load()
             .then(() => {
                 if (this.settings.facebook) {
-                    return di.getInstance('facebook').login();
+                    return di.getInstance('$facebook').login();
                 } else {
                     mainPage.resolve();
                 }

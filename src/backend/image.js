@@ -1,28 +1,28 @@
-import fs from 'fs';
-import ndarray from 'ndarray';
-import savePixels from 'save-pixels';
-
 import Pixels from '../shared/pixels';
 
 export default class Image extends Pixels {
-    constructor(outputDir) {
+    constructor(fs, ndarray, savePixels, targetDir) {
         super();
 
-        if (outputDir) {
-            this._directory = outputDir;
-            fs.existsSync(outputDir) || fs.mkdirSync(outputDir);
+        this._fs = fs;
+        this._ndarray    = ndarray;
+        this._savePixels = savePixels;
+
+        if (targetDir) {
+            this._directory = targetDir;
+            fs.existsSync(targetDir) || fs.mkdirSync(targetDir);
         }
     }
 
-    save() {
+    save(filename) {
         let fileStream,
-            filename = this.filename(),
             nda = this.ndarray(4);
 
-        nda = ndarray(nda.data, nda.shape, nda.stride, nda.offset);
+        filename = filename || this.filename();
+        nda = this._ndarray(nda.data, nda.shape, nda.stride, nda.offset);
 
-        fileStream = fs.createWriteStream(`${this._directory}/${filename}`);
-        savePixels(nda, "png").pipe(fileStream);
+        fileStream = this._fs.createWriteStream(`${this._directory}/${filename}`);
+        this._savePixels(nda, "png").pipe(fileStream);
 
         return filename;
     }

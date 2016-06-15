@@ -1,12 +1,25 @@
 #!./node_modules/.bin/babel-node
 
+//https://babeljs.io/docs/usage/require/
+import babelRegister from 'babel-register'
+
+babelRegister({
+    ignore: false
+});
+
 // Backend
 import Play from './src/backend/play';
 import Test from './src/backend/test';
 
 
 // List of all CLI arguments
-const ARGVS = ['facebook', 'snapshot', 'snapshots', 'fps', 'dry', 'bundle'],
+const ARGVS = [
+    'bundle',       // The bundle to be injected in the browser (bot)
+    'dry',          // local bot testing amd defines a input screendump
+    'facebook',     // facebook login
+    'fps',          // set game loop speed
+    'snapshots'     // enable snapshots (human play)
+    ],
     ARGVS_DEFAULT = {
         bundle: './bundle.js',
         snapshots: './snapshots',
