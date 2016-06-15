@@ -15,7 +15,7 @@ The basis for endless bot play :)
 
 ## Project status
 Currently the focus is on image processing. After that the bot will be 
-be built
+be built. 
 
 ## Setup
 
@@ -61,6 +61,17 @@ If you would like to change the output directory
 
 If the directory does not exists it will be create for you.
 These screenshots can be used to test and improve your bot if necessary.
+
+### [--dry=image_file]
+As a bot developer you can use this option to test your bot against a specific snapshot. Although
+the response from the bot is written to the console, the whole analysis is also written to image.
+For example, if the input image was `img.png`, the analysed version is `img-proc.png`. Note that
+you have to use `--bot` to incorporate the results from the bot!
+
+    $> ./driver.js --dry=./snapshots/MdHfeD.png
+    
+### [--bot=[bot_file.js]
+TODO
 
 
 
