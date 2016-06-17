@@ -12,8 +12,7 @@ export default class BasePage {
             let options = new chrome.Options();
             options.addArguments(['--disable-web-security', '--user-data-dir']);
 
-            browser = new webdriver.Builder().
-                withCapabilities(options.toCapabilities()).build();
+            browser = new webdriver.Builder().withCapabilities(options.toCapabilities()).build();
         }
 
         return browser;
@@ -24,6 +23,12 @@ export default class BasePage {
         this.options = options;
         this.webdriver = webdriver;
         this.browser = BasePage.browser;
+    }
+
+    waitFor(css, timeout = 3000) {
+        return browser.wait(() => {
+            return browser.isElementPresent(webdriver.By.css(css))
+        }, timeout);
     }
 
     /**
@@ -40,7 +45,7 @@ export default class BasePage {
                 return element.getSize()
                     .then((size) => {
                         if (size.height > 0) {
-                            this.webdriver.primise.when(element);
+                            this.webdriver.promise.when(element);
                         } else {
                             this.webdriver.promise.rejected();
                         }
@@ -49,6 +54,13 @@ export default class BasePage {
         }
 
         return promise;
+    }
+
+    removeElement(css) {
+        return this.findElement(css)
+            .then((element) => {
+                browser.executeScript("arguments[0].parentNode.removeChild(arguments[0]);", element);
+            });
     }
 
     isSettingsVisible() {

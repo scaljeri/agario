@@ -27,7 +27,7 @@ export default class Play {
         // Setup dependency injection
         di.register('$facebook', Facebook, [], {singleton: true});
         di.register('$heartbeat', Heartbeat, [], {singleton: true});
-        di.register('$image', Image, [fs, ndarray, savePixels, settings.snapshots], {singleton: true});
+        di.register('$image', Image, [fs, null, savePixels, ndarray, settings.snapshots], {singleton: true});
         di.register('$mainPage', MainPage, [], {singleton: true});
         di.register('$gamePage', GamePage, [settings], {singleton: true});
         di.register('$settingsPage', SettingsPage, [], {singleton: true});
@@ -66,6 +66,7 @@ export default class Play {
             mainPage = di.getInstance('$mainPage');
 
         return mainPage.load()
+            .then(::mainPage.cleanup)
             .then(() => {
                 if (this.settings.facebook) {
                     return di.getInstance('$facebook').login();

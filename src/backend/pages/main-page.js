@@ -16,6 +16,15 @@ export default class MainPage extends Base {
         return this.browser.get('http://agar.io');
     }
 
+    cleanup() {
+        // Remove overlay/banner
+        return this.waitFor('#openfl-content')
+            .then(() => {
+                return this.removeElement('#openfl-content')
+                    .then(() => this.removeElement('#openfl-overlay'))
+            });
+    }
+
     close() {
         return this.browser.close();
     }
