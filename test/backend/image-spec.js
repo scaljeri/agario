@@ -33,7 +33,7 @@ describe('Image:', () => {
         };
 
     beforeEach(() => {
-        di.register('$image', Image, [fs, () => {}, savePixels]);
+        di.register('$image', Image, [fs, () => {}, savePixels, () => {}]);
         image = di.getInstance('$image');
     });
 
