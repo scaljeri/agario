@@ -1,9 +1,11 @@
 export default class ShapeFactory {
-    constructor(di) {
-        this._di = di;
+    constructor(cellFactory, virusFactory, foodFactory) {
+        this._Cell = cellFactory;
+        this._Virus = virusFactory;
+        this._Food = foodFactory;
     }
 
-    getInstance(type) {
+    create() {
         return this._di.getInstance(type);
     }
 }

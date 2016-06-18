@@ -1,5 +1,3 @@
-import BaseShape from './base-shape';
-
-export default class Virus extends BaseShape {
+export default class Virus {
 
 }

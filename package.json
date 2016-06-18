@@ -56,5 +56,8 @@
     "victor": "^1.1.0",
     "watchify": "^3.7.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "babel-plugin-transform-es2015-destructuring": "^6.9.0",
+    "victor": "^1.1.0"
+  }
 }

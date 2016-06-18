@@ -5,7 +5,9 @@ let data = {
     pixels: []
 };
 
-for(let i = 0; i < 324; i++) {
+let length = data.width * data.height * data.stride;
+
+for(let i = 0; i < length; i++) {
    data.pixels.push(i);
 }
 

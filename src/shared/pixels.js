@@ -33,8 +33,12 @@ export default class Pixels {
      * Stride based iterator
      */
     *iterator() {
-        for(let i = 0; i < this._pixels.length; i+= this.stride) {
-            yield this._pixels[i];
+        let y, x;
+
+        for(y = 0; y < this.height; y++) {
+            for(x = 0; x < this.width; x++) {
+                yield { x, y, value: this.get(x, y)}
+            }
         }
     }
 
@@ -46,9 +50,17 @@ export default class Pixels {
      * @returns {Number}
      */
     get(x, y) {
-        let step = (this.width * y + x) << this._blShift;
-        return this._pixels[step];
+        return this._pixels[this.indexOf(x, y)];
     }
+
+    get pixels() {
+        return this._pixels;
+    }
+
+    indexOf(x, y) {
+        return (this._width * y + x) << this._blShift;
+    }
+
 
     /**
      * Returns an ndarray object (https://github.com/scijs/ndarray). For a stride of 4
@@ -85,6 +97,10 @@ export default class Pixels {
 
     get stride() {
         return this._stride;
+    }
+
+    get length() {
+        return this._pixels.length/this._stride;
     }
 
     /**

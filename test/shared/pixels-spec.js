@@ -16,15 +16,19 @@ describe('Pixels:', () => {
     });
 
     it('should have a height', () => {
-        pixels.height.should.equals(data.width);
+        pixels.height.should.equals(data.height);
     });
 
-    it('should have a height', () => {
-        pixels.height.should.equals(data.width);
+    it('should have a width', () => {
+        pixels.width.should.equals(data.width);
     });
 
     it('should have a stride', () => {
         pixels.stride.should.equals(data.stride);
+    });
+
+    it('should have a length', () => {
+        pixels.length.should.equals(data.pixels.length/4);
     });
 
     describe('#ndarray (default stride)', () => {
@@ -113,14 +117,18 @@ describe('Pixels:', () => {
                 iter = pixels.iterator();
             });
 
+            it('should have a stride of 4', () => {
+                pixels.stride.should.equals(4);
+            });
+
             it('should return the correct values', () => {
-                iter.next().value.should.equals(0);
-                iter.next().value.should.equals(4);
-                iter.next().value.should.equals(8);
+                iter.next().value.should.eql({x: 0, y: 0, value: 0});
+                iter.next().value.should.eql({x: 1, y: 0, value: 4});
+                iter.next().value.should.eql({x: 2, y: 0, value: 8});
             });
 
             it('should be done after data.length/4 values', () => {
-                for(let i = 0; i < data.pixels.length; i+= 4) {
+                for(let i = 0; i < pixels.length; i++) {
                     item = iter.next();
 
                     item.done.should.not.be.ok;
@@ -134,16 +142,25 @@ describe('Pixels:', () => {
 
         describe('With a stride of 2', () => {
             beforeEach(() => {
-                pixels.set(data.pixels, data.width, data.height, 2);
+                // Changing the stride from 4 to 2 we double the width to compensate
+                pixels.set(data.pixels, data.height, data.width * 2);
                 iter = pixels.iterator();
             });
 
+            it('should have the correct length', () => {
+                pixels.length.should.equals(data.pixels.length/2);
+            });
+
+            it('should have a stride of 2', () => {
+                pixels.stride.should.equals(2);
+            });
+
             it('should be done after data.length/2 values', () => {
-                for(let i = 0; i < data.pixels.length; i+= 2) {
+                for(let i = 0; i < pixels.length; i++) {
                     item = iter.next();
 
                     item.done.should.not.be.ok;
-                    item.value.should.be.a.number;
+                    item.value.value.should.be.a.number;
                 }
 
                 iter.next().done.should.be.ok;
@@ -152,8 +169,16 @@ describe('Pixels:', () => {
 
         describe('With a stride of 1', () => {
             beforeEach(() => {
-                pixels.set(data.pixels, data.width, data.height, 1);
+                pixels.set(data.pixels, data.width * 2, data.height * 2, 1);
                 iter = pixels.iterator();
+            });
+
+            it('should have the correct length', () => {
+                pixels.length.should.equals(data.pixels.length);
+            });
+
+            it('should have a stride of 2', () => {
+                pixels.stride.should.equals(1);
             });
 
             it('should be done after data.length values', () => {

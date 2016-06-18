@@ -122,7 +122,6 @@ export default class Heartbeat {
 
     stop() {
         if (this.timeoutId) {
-            console.log("STOP " + this.timeoutId);
             clearTimeout(this.timeoutId);
         }
 
