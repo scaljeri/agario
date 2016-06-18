@@ -8,14 +8,29 @@ export default class Circle {
         }
     }
 
+    /**
+     * A vector with an x and y value, representing the center of the circle
+     *
+     * @returns {Victor}
+     */
     get center() {
         return this._center;
     }
 
+    /**
+     * Radius of the circle
+     * @returns {number}
+     */
     get radius() {
         return this._radius;
     }
 
+    /**
+     * Compute a circle (center and radius) based on 3 or more points one circle
+     *
+     * @param {Object} data - x-y values forming a cricle
+     * @returns {this}
+     */
     approximate(data) {
         let A = [], b = [];
 
