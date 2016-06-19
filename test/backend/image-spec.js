@@ -62,12 +62,13 @@ describe('Image:', () => {
         let spyFs, spyPipe, dirname = './dir', filename = 'screenshot.png';
 
         beforeEach(() => {
+            let data = dummyPixels();
             image = di.getInstance('$image', dirname);
             spy = sinon.stub(image, 'filename').returns(filename);
             spyFs = sinon.stub(fs, 'createWriteStream').returns('stream');
             spyPipe = sinon.spy(pixelsRetVal, 'pipe');
 
-            image.set(dummyPixels.pixels, dummyPixels.height, dummyPixels.width, 4)
+            image.set(data.pixels, data.height, data.width, 4)
                  .save()
         });
 

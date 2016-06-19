@@ -14,8 +14,7 @@ The goal of this project is twofold:
 The basis for endless bot play :)
 
 ## Project status
-Currently the focus is on image processing. After that the bot will be 
-be built. 
+Currently the focus is on image processing. After that a bot will be built. 
 
 ## Setup
 

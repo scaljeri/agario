@@ -29,6 +29,26 @@ export default class Pixels {
         }
     }
 
+    get height() {
+        return this._height;
+    }
+
+    get width() {
+        return this._width;
+    }
+
+    get stride() {
+        return this._stride;
+    }
+
+    get length() {
+        return this._pixels.length/this._stride;
+    }
+
+    get pixels() {
+        return this._pixels;
+    }
+
     /**
      * Stride based iterator
      */
@@ -53,8 +73,12 @@ export default class Pixels {
         return this._pixels[this.indexOf(x, y)];
     }
 
-    get pixels() {
-        return this._pixels;
+    change(x, y, ...rgba) {
+        let index = this.indexOf(x, y);
+
+        for(let i = 0; i < this._stride; i++) {
+            this._pixels[index + i] = rgba[i];
+        }
     }
 
     indexOf(x, y) {
@@ -85,22 +109,6 @@ export default class Pixels {
             stride: [stride, stride * this.width, 1],
             offset: 0
         };
-    }
-
-    get height() {
-        return this._height;
-    }
-
-    get width() {
-        return this._width;
-    }
-
-    get stride() {
-        return this._stride;
-    }
-
-    get length() {
-        return this._pixels.length/this._stride;
     }
 
     /**

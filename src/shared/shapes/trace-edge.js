@@ -4,9 +4,20 @@ const PIXEL_THRESHOLD = 100,
     MAX_TRACE_LENGTH = 1000;
 
 export default class TraceEdge {
+    constructor(inRGB, outRGB) {
+        this.inRGB = inRGB;
+        this.outRGB = outRGB;
+    }
+
     setImage(image) {
         this._image = image;
         this._trace = [];
+
+        return this;
+    }
+
+    get trace() {
+        return this._trace || [];
     }
 
     start(x, y) {

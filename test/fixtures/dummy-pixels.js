@@ -1,14 +1,17 @@
-let data = {
-    width: 9,
-    height: 9,
-    stride: 4,
-    pixels: []
-};
+export default function dummyData() {
+    let length, i,
+        data = {
+        width: 9,
+        height: 9,
+        stride: 4,
+        pixels: []
+    };
 
-let length = data.width * data.height * data.stride;
+    length = data.width * data.height * data.stride;
 
-for(let i = 0; i < length; i++) {
-   data.pixels.push(i);
+    for (i = 0; i < length; i++) {
+        data.pixels.push(i);
+    }
+
+    return data;
 }
-
-export default data;

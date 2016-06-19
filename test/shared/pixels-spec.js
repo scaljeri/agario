@@ -1,6 +1,6 @@
 import chai from 'chai';
 
-import data from '../fixtures/dummy-pixels';
+import dummyData from '../fixtures/dummy-pixels';
 import Pixels from '../../src/shared/pixels';
 
 chai.should();
@@ -8,9 +8,10 @@ let should = chai.should();
 
 
 describe('Pixels:', () => {
-    let pixels;
+    let pixels, data;
 
     beforeEach(() => {
+        data = dummyData();
         pixels = new Pixels();
         pixels.set(data.pixels, data.width, data.height);
     });
@@ -29,6 +30,59 @@ describe('Pixels:', () => {
 
     it('should have a length', () => {
         pixels.length.should.equals(data.pixels.length/4);
+    });
+
+    describe('#change', () => {
+        let index;
+
+        beforeEach(() => {
+            pixels.change(5, 5, 3, 4, 5, 6);
+            index = pixels.indexOf(5, 5);
+        });
+
+        it('should set the R value', () => {
+            pixels.pixels[index].should.equals(3);
+        });
+
+        it('should set the G value', () => {
+            pixels.pixels[index + 1].should.equals(4);
+        });
+
+        it('should set the B value', () => {
+            pixels.pixels[index + 2].should.equals(5);
+        });
+
+        it('should set the A value', () => {
+            pixels.pixels[index + 3].should.equals(6);
+        });
+
+        describe('Stride of 2', () => {
+            let origData;
+
+            beforeEach(() => {
+                origData = dummyData();
+                pixels.set(data.pixels, data.width, data.height, 2);
+
+                pixels.change(5, 5, 3, 4, 5, 6);
+                index = pixels.indexOf(5, 5);
+            });
+
+            it('should set the R value', () => {
+                pixels.pixels[index].should.equals(3);
+            });
+
+            it('should set the G value', () => {
+                pixels.pixels[index + 1].should.equals(4);
+            });
+
+            it('should not have set the B value', () => {
+                pixels.pixels[index + 2].should.equals(origData.pixels[index + 2]);
+            });
+
+            it('should not have set the A value', () => {
+                pixels.pixels[index + 3].should.equals(origData.pixels[index + 3]);
+            });
+        })
     });
 
     describe('#ndarray (default stride)', () => {
