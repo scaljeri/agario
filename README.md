@@ -152,3 +152,35 @@ a=document.getElementById("canvas"),b=this.onkeydown,c=this.onkeyup,d=a.onmousem
 let okd =  window.onkeydown; window.onkeydown = (e) => {console.log('down:' + e.keyCode);okd({keyCode: e.keyCode === 32 ? 32 : 87});}
 let oku =  window.onkeyup; window.onkeyup = (e) => { console.log('up:' + e.keyCode);oku({keyCode: e.keyCode === 32 ? 32 : 87});}
 
+### agarly.com
+Although agar.io is a great game, [agarly](http://agarly.com/2W41j) is a variant of this game with a lot more
+action and a lot mor fun. It is a game where you have to be fast and trick you opponents all the time. 
+Maybe in the far future I'll write a bot for this game too, but until then you have to do it human-play only.
+As with agar.io, this game has a lot of PRO's too, and to beat them I've written a hack which enables you to 
+shoot with any key (not **spacebar** of course). This way you can switch faster between splitting (**spacebar**)
+and merging (**shooting**). Copy-past the code below into you browser's console (tested in Chrome only) and you
+can play as a PRO!
+
+    function changeKeyListeneres(w) {
+        let okd, oku;
+
+        function onKeyDown(e) {
+            okd({keyCode: e.keyCode === 32 ? 32 : 87});
+        }
+
+        if (w.onkeydown === onkeydown) {
+            okd = w.onkeydown;
+            w.onkeydown = onKeyDown;
+
+            oku = w.onkeyup;
+            w.onkeyup = (e) => {
+                oku({keyCode: e.keyCode === 32 ? 32 : 87});
+            }
+        }
+    }
+
+    setInterval(() => {
+        changeKeyListeneres(window);
+    }, 5000);
+
+If you see a cell with the name `TeAm XtreMe` it most likely will be me!
