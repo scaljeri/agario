@@ -26,9 +26,9 @@ export default class Circle {
     }
 
     /**
-     * Compute a circle (center and radius) based on 3 or more points one circle
+     * Compute circle properties (center and radius) based on 3 or more points
      *
-     * @param {Object} data - x-y values forming a cricle
+     * @param {Object} data - x-y values
      * @returns {this}
      */
     approximate(data) {
