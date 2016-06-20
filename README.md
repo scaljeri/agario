@@ -158,29 +158,42 @@ action and a lot mor fun. It is a game where you have to be fast and trick you o
 Maybe in the far future I'll write a bot for this game too, but until then you have to do it human-play only.
 As with agar.io, this game has a lot of PRO's too, and to beat them I've written a hack which enables you to 
 shoot with any key (not **spacebar** of course). This way you can switch faster between splitting (**spacebar**)
-and merging (**shooting**). Copy-past the code below into you browser's console (tested in Chrome only) and you
-can play as a PRO!
+and merging (**shooting**). Goto agarly to the and copy-past the code below into your browser's console 
+(tested in Chrome only) and you can play as a PRO!
 
-    function changeKeyListeneres(w) {
-        let okd, oku;
+    (function (w) {
+       let timer;
+       
+        function changeKeyListeneres() {
+            let okd, oku;
+            
+            function onKeyDown(e) {
+                okd({keyCode: e.keyCode === 32 ? 32 : 87});
+            }
 
-        function onKeyDown(e) {
-            okd({keyCode: e.keyCode === 32 ? 32 : 87});
-        }
+            if (w.onkeydown !== okd) {
+                okd = w.onkeydown;
+                w.onkeydown = onKeyDown;
 
-        if (w.onkeydown === onkeydown) {
-            okd = w.onkeydown;
-            w.onkeydown = onKeyDown;
-
-            oku = w.onkeyup;
-            w.onkeyup = (e) => {
-                oku({keyCode: e.keyCode === 32 ? 32 : 87});
+                oku = w.onkeyup;
+                w.onkeyup = (e) => {
+                    oku({keyCode: e.keyCode === 32 ? 32 : 87});
+                }
+                
+                clearInterval(timer);
+                console.log('Setup is ready, enjoy playing!!!');
             }
         }
-    }
 
-    setInterval(() => {
-        changeKeyListeneres(window);
-    }, 5000);
+        timer = setInterval(() => {
+            if (window.onkeydown) {
+                changeKeyListeneres();
+            }
+        }, 500);
+    })(window);
+
+NOTE: It is important that you run this code as soon as possible. Wait until you see the message 
+that it is ready before you begin!
+
 
 If you see a cell with the name `TeAm XtreMe` it most likely will be me!
