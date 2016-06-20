@@ -73,7 +73,17 @@ export default class Pixels {
         return this._pixels[this.indexOf(x, y)];
     }
 
-    change(x, y, ...rgba) {
+    getMetadata(x, y) {
+        return this._metadata[this.indexOf(x, y)];
+    }
+
+    setMetadata(x, y, value) {
+        this._metadata[this.indexOf(x, y)] = value;
+
+        return this;
+    }
+
+    change(x, y, rgba) {
         let index = this.indexOf(x, y);
 
         for(let i = 0; i < this._stride; i++) {
@@ -131,6 +141,8 @@ export default class Pixels {
             this._pixels = pixels;
             this._stride = stride || pixels.length / (width * height); // Expect 1, 2 or 4
         }
+
+        this._metadata = [];
 
         this._blShift = Math.floor(this._stride / 2);                  //  Bitwise left shift value;
 
