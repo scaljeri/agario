@@ -45,7 +45,7 @@ export default class Pixels {
         return this._pixels.length/this._stride;
     }
 
-    get pixels() {
+    get list() {
         return this._pixels;
     }
 

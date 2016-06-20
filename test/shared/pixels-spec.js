@@ -36,24 +36,24 @@ describe('Pixels:', () => {
         let index;
 
         beforeEach(() => {
-            pixels.change(5, 5, 3, 4, 5, 6);
+            pixels.change(5, 5, [3, 4, 5, 6]);
             index = pixels.indexOf(5, 5);
         });
 
         it('should set the R value', () => {
-            pixels.pixels[index].should.equals(3);
+            pixels.list[index].should.equals(3);
         });
 
         it('should set the G value', () => {
-            pixels.pixels[index + 1].should.equals(4);
+            pixels.list[index + 1].should.equals(4);
         });
 
         it('should set the B value', () => {
-            pixels.pixels[index + 2].should.equals(5);
+            pixels.list[index + 2].should.equals(5);
         });
 
         it('should set the A value', () => {
-            pixels.pixels[index + 3].should.equals(6);
+            pixels.list[index + 3].should.equals(6);
         });
 
         describe('Stride of 2', () => {
@@ -63,24 +63,24 @@ describe('Pixels:', () => {
                 origData = dummyData();
                 pixels.set(data.pixels, data.width, data.height, 2);
 
-                pixels.change(5, 5, 3, 4, 5, 6);
+                pixels.change(5, 5, [3, 4, 5, 6]);
                 index = pixels.indexOf(5, 5);
             });
 
             it('should set the R value', () => {
-                pixels.pixels[index].should.equals(3);
+                pixels.list[index].should.equals(3);
             });
 
             it('should set the G value', () => {
-                pixels.pixels[index + 1].should.equals(4);
+                pixels.list[index + 1].should.equals(4);
             });
 
             it('should not have set the B value', () => {
-                pixels.pixels[index + 2].should.equals(origData.pixels[index + 2]);
+                pixels.list[index + 2].should.equals(origData.pixels[index + 2]);
             });
 
             it('should not have set the A value', () => {
-                pixels.pixels[index + 3].should.equals(origData.pixels[index + 3]);
+                pixels.list[index + 3].should.equals(origData.pixels[index + 3]);
             });
         })
     });

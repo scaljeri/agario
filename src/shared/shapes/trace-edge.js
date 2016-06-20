@@ -5,8 +5,17 @@ const PIXEL_THRESHOLD = 100,
 
 export default class TraceEdge {
     constructor(inRGB, outRGB) {
-        this.inRGB = inRGB;
-        this.outRGB = outRGB;
+        this._inRGB = inRGB;
+        this._outRGB = outRGB;
+
+        // The 'A' is used to determine if a pixels has already been traced
+        if (this._inRGB) {
+            this._inRGB.push(254);
+        }
+
+        if (this._outRGB) {
+            this._outRGB.push(254);
+        }
     }
 
     setImage(image) {
@@ -20,11 +29,41 @@ export default class TraceEdge {
         return this._trace || [];
     }
 
-    start(x, y) {
-        var pix, origPix = this.img.get(x, y);
+    start(x, y, isInside = true) {
+        let w, h, index;
 
-        for (var i = -1; i <= 1; i++) {
-            for (var j = -1; j <= 1; j++) {
+        for (w = -1; w <= 1; w++) {
+            for (h = -1; h <= 1; h++) {
+                if (w === 0 && h !== 0) {
+                    index = this._image.indexOf(x + w, y + h);
+
+                    if (this._image.pixels[index + 3] === 255) { // new pixel
+                        if (isInside) {
+                            if (pixel < PIXEL_THRESHOLD) {
+                                if (this._outRGB) {
+                                    this._image.change(x + w, y + h, this._outRGB);
+                                }
+                                if (this.start(x + w, y + h, false)) {
+                                    return true;
+                                }
+
+                            }
+                        } else if (pixel >= PIXEL_THRESHOLD) {
+                            this._trace.push({x: x + w, y: y + h});
+                            
+                            if (this._inRGB) {
+                                this._image.change(x + w, y + h, this._inRGB);
+                            }
+                            if (this.start(x + w, y + h, true)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /*
                 if (i !== j || i !== 0) {
                     pix = this.img.get(x + i, y + j);
 
@@ -32,9 +71,12 @@ export default class TraceEdge {
                         let index = this.img.indexOf(x + i, y + j);
 
                         if (origPix === 0 && pix < PIXEL_THRESHOLD) {
+                            this._image.change(x + i, y + j, this._outRGB)
+
                             this.img.pixels[index] = 90;
                             this.img.pixels[index + 1] = 10;
                             this.img.pixels[index + 2] = 90;
+
                             if (this.traceEdge(x + i, y + j)) {
                                 return true;
                             }
@@ -57,7 +99,6 @@ export default class TraceEdge {
                         }
                     }
                 }
-            }
-        }
+                */
     }
 }
