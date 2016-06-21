@@ -152,13 +152,12 @@ a=document.getElementById("canvas"),b=this.onkeydown,c=this.onkeyup,d=a.onmousem
 let okd =  window.onkeydown; window.onkeydown = (e) => {console.log('down:' + e.keyCode);okd({keyCode: e.keyCode === 32 ? 32 : 87});}
 let oku =  window.onkeyup; window.onkeyup = (e) => { console.log('up:' + e.keyCode);oku({keyCode: e.keyCode === 32 ? 32 : 87});}
 
-### agarly.com
+### agarly.com - Play it like a PRO
 Although agar.io is a great game, [agarly](http://agarly.com/2W41j) is a variant of this game with a lot more
 action and a lot mor fun. It is a game where you have to be fast and trick you opponents all the time. 
-Maybe in the far future I'll write a bot for this game too, but until then you have to do it human-play only.
-As with agar.io, this game has a lot of PRO's too, and to beat them I've written a hack which enables you to 
-shoot with any key (not **spacebar** of course). This way you can switch faster between splitting (**spacebar**)
-and merging (**shooting**). Goto agarly to the and copy-past the code below into your browser's console 
+Maybe in the far future I'll write a bot for this game too, but until then you have to do it with human-play only.
+I've written a hack which enables you to shoot with any key (not **spacebar** of course). This way you can switch 
+faster between splitting (**spacebar**) and merging (**shooting**). Copy-past the code below into your browser's console 
 (tested in Chrome only) and you can play as a PRO!
 
     (function (w) {
@@ -192,8 +191,7 @@ and merging (**shooting**). Goto agarly to the and copy-past the code below into
         }, 500);
     })(window);
 
-NOTE: It is important that you run this code as soon as possible. Wait until you see the message 
+NOTE: You have to run this code as soon as possible when the intro-spinner is gone. Wait until you see the message 
 that it is ready before you begin!
 
-
-If you see a cell with the name `TeAm XtreMe` it most likely will be me!
+IMPORTANT: If you see a cell with the name `TeAm XtreMe` it most likely will be me - please don't eat me!!!
