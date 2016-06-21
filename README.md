@@ -154,10 +154,10 @@ let oku =  window.onkeyup; window.onkeyup = (e) => { console.log('up:' + e.keyCo
 
 ### agarly.com - Play it like a PRO
 Although agar.io is a great game, [agarly](http://agarly.com/2W41j) is a variant of this game with a lot of
-action and a lot more fun. It is a game where you have to be fast and trick you opponents all the time. 
+action and a lot more fun. It is a game where you have to be fast and trick your opponents all the time. 
 Maybe in the far future I'll write a bot for this game too, but until then you have to do it with human-play only.
 I've written a hack which enables you to shoot with any key (not **spacebar** of course). This way you can switch 
-faster between splitting (**spacebar**) and merging (**shooting**). Copy-past the code below into your browser's console 
+faster between splitting and merging by shooting. Copy-past the code below into your browser's console 
 (tested in Chrome only) and you can play as a PRO!
 
     (function (w) {
