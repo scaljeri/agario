@@ -292,18 +292,28 @@ describe('Pixels:', () => {
             pixels.updateMetadata(x, y, 'foo', {a: 10});
         });
 
-        it('should be possible to get metadata of a pixel', () => {
+        it('should be possible to get metadata of a pixel by x and y', () => {
             pixels.getMetadata(x, y, 'foo').should.eql({a: 10});
         });
 
-        it('should be possible to update', () => {
+        it('should be possible to get metadata of a pixel by index', () => {
+            pixels.getMetadata(pixels.indexOf(x, y), 'foo').should.eql({a: 10});
+        });
+
+        it('should be possible to update by x and y', () => {
             pixels.updateMetadata(x, y, 'bar', 2);
 
             pixels.getMetadata(x, y, 'bar').should.equals(2);
         });
 
+        it('should be possible to update by index', () => {
+            pixels.updateMetadata(pixels.indexOf(x, y), 'bar', 2);
+
+            pixels.getMetadata(x, y, 'bar').should.equals(2);
+        });
+
         it('should be possible to retrieve the whole object', () => {
-            pixels.getMetadata(x, y).should.eql({bar: 1, foo: {a: 10}});
+            pixels.getMetadata(pixels.indexOf(x, y)).should.eql({bar: 1, foo: {a: 10}});
         });
     });
 });

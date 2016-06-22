@@ -73,28 +73,65 @@ export default class Pixels {
         return this._pixels[this.indexOf(x, y)];
     }
 
+    /**
+     * A Polymorphic function which accepts 2 or 3 arguments. Both {x, y} or
+     * the `index` can be set together with the key value.
+     *
+     * @param x x-value or index of a pixel
+     * @param y y-value or omitted if index is given
+     * @param key  meta-data key
+     * @returns {*} The value set for this pixel
+     */
     getMetadata(x, y, key) {
-        let meta = this._metadata[this.indexOf(x, y)] || {};
+        let index;
 
-        return key ? meta[key] : meta;
-    }
-
-    updateMetadata(x, y, key, value) {
-        let index = this.indexOf(x, y);
+        if (!key) {
+            index = x;
+            key = y;
+        } else {
+            index = this.indexOf(x, y);
+        }
 
         if (!this._metadata[index]) {
             this._metadata[index] = {};
         }
 
-        this._metadata[this.indexOf(x, y)][key] = value;
+        return key ? this._metadata[index][key] : this._metadata[index];
+
+    }
+
+    updateMetadata(x, y, key, value) {
+        let index;
+
+        if (arguments.length === 3) {
+            index = x;
+            value = key;
+            key = y;
+        } else {
+            index = this.indexOf(x, y);
+        }
+
+        if (!this._metadata[index]) {
+            this._metadata[index] = {};
+        }
+
+        this._metadata[index][key] = value;
 
         return this;
+
     }
 
     change(x, y, rgba) {
-        let index = this.indexOf(x, y);
+        let index;
 
-        for(let i = 0; i < this._stride; i++) {
+        if (!rgba) {
+            index = x;
+            rgba = y;
+        } else {
+            index = this.indexOf(x, y);
+        }
+
+        for(let i = 0; i < Math.min(this._stride, rgba.length); i++) {
             this._pixels[index + i] = rgba[i];
         }
     }
