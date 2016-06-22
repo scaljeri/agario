@@ -282,5 +282,23 @@ describe('Pixels:', () => {
                 pixels.get(1, 1).should.equals(10);
             });
         });
-    })
+    });
+
+    describe('#getMetadata/setMetadata', () => {
+        let x = 2, y = 1, meta = {used: true};
+
+        beforeEach(() => {
+            pixels.setMetadata(x, y, meta);
+        });
+
+        it('should be possible to get metadata of a pixel', () => {
+            pixels.getMetadata(x, y).should.equals(meta);
+        });
+
+        it('should be possible to update', () => {
+            pixels.setMetadata(x, y, 1);
+
+            pixels.getMetadata(x, y).should.equals(1);
+        })
+    });
 });
