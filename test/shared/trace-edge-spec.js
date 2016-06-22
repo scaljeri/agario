@@ -12,7 +12,7 @@ let di = new DI();
 di.register('$traceedge', TraceEdge);
 
 describe('Circle:', () => {
-    let image, traceEdge = di.getInstance('$traceedge');
+    let image, traceEdge = di.getInstance('$traceedge', [3,3,3], [4,4,4]);
 
     beforeEach(() => {
         image = imageData();

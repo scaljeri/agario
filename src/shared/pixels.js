@@ -73,12 +73,20 @@ export default class Pixels {
         return this._pixels[this.indexOf(x, y)];
     }
 
-    getMetadata(x, y) {
-        return this._metadata[this.indexOf(x, y)];
+    getMetadata(x, y, key) {
+        let meta = this._metadata[this.indexOf(x, y)] || {};
+
+        return key ? meta[key] : meta;
     }
 
-    setMetadata(x, y, value) {
-        this._metadata[this.indexOf(x, y)] = value;
+    updateMetadata(x, y, key, value) {
+        let index = this.indexOf(x, y);
+
+        if (!this._metadata[index]) {
+            this._metadata[index] = {};
+        }
+
+        this._metadata[this.indexOf(x, y)][key] = value;
 
         return this;
     }

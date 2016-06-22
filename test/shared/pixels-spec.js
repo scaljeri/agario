@@ -284,21 +284,26 @@ describe('Pixels:', () => {
         });
     });
 
-    describe('#getMetadata/setMetadata', () => {
-        let x = 2, y = 1, meta = {used: true};
+    describe('#getMetadata/updateMetadata', () => {
+        let x = 2, y = 1;
 
         beforeEach(() => {
-            pixels.setMetadata(x, y, meta);
+            pixels.updateMetadata(x, y, 'bar', 1);
+            pixels.updateMetadata(x, y, 'foo', {a: 10});
         });
 
         it('should be possible to get metadata of a pixel', () => {
-            pixels.getMetadata(x, y).should.equals(meta);
+            pixels.getMetadata(x, y, 'foo').should.eql({a: 10});
         });
 
         it('should be possible to update', () => {
-            pixels.setMetadata(x, y, 1);
+            pixels.updateMetadata(x, y, 'bar', 2);
 
-            pixels.getMetadata(x, y).should.equals(1);
-        })
+            pixels.getMetadata(x, y, 'bar').should.equals(2);
+        });
+
+        it('should be possible to retrieve the whole object', () => {
+            pixels.getMetadata(x, y).should.eql({bar: 1, foo: {a: 10}});
+        });
     });
 });

@@ -51,6 +51,15 @@ export default class Circle {
 
         this._radius = Math.sqrt((Math.pow(a[0], 2) + Math.pow(a[1], 2))/4 - a[2]);
 
+        /*
+        // Calculate error
+        be = numeric.dot(A, a);
+        for (i = 0; i < be.length; i++) {
+            this.error += Math.pow((be[i] - b[i]), 2);
+        }
+        this.error /= b.length;
+        */
+
         return this;
     }
 }
