@@ -4,18 +4,8 @@ const PIXEL_THRESHOLD = 100,
     MAX_TRACE_LENGTH = 1000;
 
 export default class TraceEdge {
-    constructor(inRGB, outRGB) {
-        this._inRGB = inRGB;
-        this._outRGB = outRGB;
-
-        // The 'A' is used to determine if a pixels has already been traced
-        if (this._inRGB) {
-            this._inRGB.push(254);
-        }
-
-        if (this._outRGB) {
-            this._outRGB.push(254);
-        }
+    constructor(RGBA) {
+        this._RGBA = RGBA;
     }
 
     setImage(image) {
@@ -37,94 +27,45 @@ export default class TraceEdge {
                 if (w === 0 && h !== 0) {
                     index = this._image.indexOf(x + w, y + h);
 
-                    if (this.checkPixel(x + w, y + h, !isInside)) {
-                        this.updatePixel(index, !isInside);
-                        if (this.start(x + w, y + h, !isInside)) {
+                    if (this.usePixel(index, !isInside)) {
+                        this._trace.push(index);
+
+                        if (this._trace.length === MAX_TRACE_LENGTH || this.start(x + w, y + h, !isInside)) {
                             return true;
                         }
-                    } else {
-                        // ????
                     }
                 }
             }
         }
+
+        return false;
     }
 
-    checkPixel(x, y, isInside) {
-        let meta = this._image.getMetadata(x, y),
+    usePixel(index, isInside) {
+        let isTraced = this._image.getMetadataByIndex(index, 'traced'),
+            pixelVal = this._image.pixels[index],
             retVal = false;
 
-        if (!meta) {
-            
+        if (!isTraced) {                        // new pixel?
+            if (pixelVal < PIXEL_THRESHOLD) {   // outside pixel
+                if (isInside) {                 // is it needed?
+                    retVal = true;
+                }
+            } else if (!isInside) {             // inside pixel needed?
+                retVal = true;
+            }
+        }
+
+        if (retVal) {
+            this._image.updateMetadataByIndex(index, 'traced', true);
         }
 
         return retVal;
-
-
-        if (this._image.pixels[index + 3] === 255) { // new pixel
-            if (isInside) {
-                if (pixel < PIXEL_THRESHOLD) {
-                    if (this._outRGB) {
-                        this._image.change(x + w, y + h, this._outRGB);
-                    }
-                    if (this.start(x + w, y + h, false)) {
-                        return true;
-                    }
-
-                }
-            } else if (pixel >= PIXEL_THRESHOLD) {
-                this._trace.push({x: x + w, y: y + h});
-
-                if (this._inRGB) {
-                    this._image.change(x + w, y + h, this._inRGB);
-                }
-                if (this.start(x + w, y + h, true)) {
-                    return true;
-                }
-            }
-        }
-
     }
 
-    updatePixel(x, y, isInside) {
-
+    paintTrace(rgba) {
+        this._trace.forEach((index) => {
+            this._image.change(index, rgba || this._RGBA);
+        });
     }
-
-        /*
-                if (i !== j || i !== 0) {
-                    pix = this.img.get(x + i, y + j);
-
-                    if (pix !== 0 && y > 0 && (x + i) > 0 && (x + i) < this.img.width - 5) { // Make sure its a new point
-                        let index = this.img.indexOf(x + i, y + j);
-
-                        if (origPix === 0 && pix < PIXEL_THRESHOLD) {
-                            this._image.change(x + i, y + j, this._outRGB)
-
-                            this.img.pixels[index] = 90;
-                            this.img.pixels[index + 1] = 10;
-                            this.img.pixels[index + 2] = 90;
-
-                            if (this.traceEdge(x + i, y + j)) {
-                                return true;
-                            }
-                        } else if (origPix !== 0 && pix >= PIXEL_THRESHOLD) {
-                            this.img.pixels[index] = this.img.pixels[index + 2] = 0;
-                            this.img.pixels[index + 1] = 255;
-                            this.trace.push({x: x + i, y: y + j});
-
-                            if (x < 1 || y < 1 || this.img.width < x + 1 || this.img.height < y + 1) {
-                                return false;
-                            }
-
-                            if (this.trace.length >= MAX_TRACE_LENGTH) {
-                                return true;
-                            } else {
-                                if (this.traceEdge(x + i, y + j)) {
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                }
-                */
 }
