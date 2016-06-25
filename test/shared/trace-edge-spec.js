@@ -3,7 +3,7 @@ import 'babel-polyfill';
 import chai from 'chai';
 import DI from 'javascript-dependency-injection';
 
-import {imageData} from '../fixtures/image-data';
+import ImageGen from '../fixtures/image-gen';
 import TraceEdge from '../../src/shared/shapes/trace-edge';
 
 chai.should();
@@ -12,11 +12,14 @@ let di = new DI();
 di.register('$traceedge', TraceEdge);
 
 describe('Circle:', () => {
-    let image, traceEdge = di.getInstance('$traceedge', [3,3,3], [4,4,4]);
+    let circle, image, traceEdge = di.getInstance('$traceedge', [3,3,3], [4,4,4]);
 
     beforeEach(() => {
-        image = imageData();
-        traceEdge.setImage(image);
+        image = new ImageGen();
+        circle = image.defineCircle();
+        //circle = image.defineCircle(50, 20);
+        //circle = image.defineCircle(60);
+        traceEdge.setImage(image.create());
     });
 
     it('should initially have no trace', () => {
