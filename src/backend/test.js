@@ -12,15 +12,17 @@ import Food from '../shared/shapes/food';
 import Image from './image';
 import PlayGround from '../shared/play-ground';
 import Shape from '../shared/shape';
-import TraceEdge from '../shared/shapes/trace-edge';
+import TraceEdge from '../shared/shapes/analysers/trace-edge';
+import CircleApprox from '../shared/shapes/analysers/circle-approx';
 import Virus from '../shared/shapes/virus';
 
 let di = new DI();
 
 export default class Test {
     constructor(settings) {
-        di.register('$shape', Shape, ['$traceEdge', 'circleFactory', 'cellFactory', 'foodFactory', 'virusFactory', false], {singleton: true});
-        di.register('$traceedge', TraceEdge, {singleton: true});
+        di.register('$shape', Shape, ['$circleApprox', 'circleFactory', 'cellFactory', 'foodFactory', 'virusFactory', false], {singleton: true});
+        di.register('$traceedge', TraceEdge, [[255, 0, 127]], {singleton: true});
+        di.register('$circleApprox', CircleApprox, [[255, 0, 127]], {singleton: true});
         di.register('$cell', Cell);
         di.register('$circle', Circle, ['$victorFactory', numeric]);
         di.register('$food', Food);

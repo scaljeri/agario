@@ -26,10 +26,9 @@ export default class ImageGen {
                 value = 0;
 
                 this._circles.forEach((circle) => {
-                    //console.log('distance=' + (circle.center.distance(pixel)));
                     distance = circle.center.distance(pixel);
-                    if (distance <= circle.r + 2) { // +2 to make sure the outline is `0`
-                        value = circle.center.distance(pixel) > circle.r ?  0 : 200;
+                    if (distance <= circle.r + 3) { // +2 to make sure the outline is `0`
+                        value = circle.center.distance(pixel) > circle.r ?  170 : 255;
                     }
                 });
 

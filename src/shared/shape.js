@@ -1,6 +1,6 @@
 export default class Shape {
-    constructor(traceEdge, circleFactory, cellFactory, foodFactory, virusFactory, readonly = true) {
-        this._traceEdge = traceEdge;
+    constructor(analyser, circleFactory, cellFactory, foodFactory, virusFactory, readonly = true) {
+        this._analyser = analyser;
         this._Circle = circleFactory;
         this._Cell = cellFactory;
         this._Food = foodFactory;
@@ -13,8 +13,11 @@ export default class Shape {
     }
 
     create(x, y, image) {
-        let circle, [cx, cy, r] = getCircleProps(traceEdge.call({img: image, trace: [], traceEdge: traceEdge}, x, y));
-        circle = this.Circle(cx, cy, r);
+        this._analyser.set(image)
+            .start(x, y);
+
+        //let circle, [cx, cy, r] = getCircleProps(this._traceEdge.call({img: image, trace: [], traceEdge: traceEdge}, x, y));
+        //circle = this.Circle(cx, cy, r);
     }
 }
 
