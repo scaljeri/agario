@@ -164,10 +164,26 @@ faster between splitting and merging by shooting. Copy-past the code below into 
        let timer;
        
         function changeKeyListeneres() {
-            let okd, oku;
+            let okd, oku, burst;
             
             function onKeyDown(e) {
-                okd({keyCode: e.keyCode === 32 ? 32 : 87});
+                let count = 0;
+                
+                // Any key (except `w` and `space-bar`
+                if (!~[32, 87].indexOf(e.keyCode) && !burst) {
+                    burst = setInterval(() => {
+                        count ++;
+                        if (count === 20) {
+                            clearInterval(burst);
+                            burst = null;
+                        }
+                        
+                        okd({keyCode: 87});
+                        oku({keyCode: 87});
+                    }, 20);
+                } else {
+                    okd({keyCode: e.keyCode === 32 ? 32 : 87});
+                }
             }
 
             if (w.onkeydown !== okd) {
@@ -176,7 +192,7 @@ faster between splitting and merging by shooting. Copy-past the code below into 
 
                 oku = w.onkeyup;
                 w.onkeyup = (e) => {
-                    oku({keyCode: e.keyCode === 32 ? 32 : 87});
+                        oku({keyCode: e.keyCode === 32 ? 32 : 87});
                 }
                 
                 clearInterval(timer);
