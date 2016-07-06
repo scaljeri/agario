@@ -1,5 +1,8 @@
 import Victor from 'victor';
 
+import {PIXEL_THRESHOLD} from '../../src/shared/config';
+import Pixels from '../../src/shared/pixels';
+
 export default class ImageGen {
     constructor(width = 100, height = 100) {
         this._circles = [];
@@ -16,8 +19,8 @@ export default class ImageGen {
     }
 
     create() {
-        let distance, value, pixel = new Victor(0,0);
-        this.pixels = [];
+        let distance, value, pixel = new Victor(0,0),
+            pixels = [];
 
         for (let h = 0; h < this._height; h++) {
             for (let w = 0; w < this._width; w++) {
@@ -28,30 +31,33 @@ export default class ImageGen {
                 this._circles.forEach((circle) => {
                     distance = circle.center.distance(pixel);
                     if (distance <= circle.r + 3) { // +2 to make sure the outline is `0`
-                        value = circle.center.distance(pixel) > circle.r ?  170 : 255;
+                        value = circle.center.distance(pixel) > circle.r ?  170 : PIXEL_THRESHOLD;
                     }
                 });
 
-                this.pixels.push(value);
+                pixels.push(value);
             }
         }
 
-        return this;
+        this.pixels = new Pixels(pixels, this._height, this._width, 1);
+
+        return this.pixels;
     }
 
-    indexOf(x, y) {
-        return y * this._width + x;
-    }
+    render(pixels, trace) {
+        let pixel, line = '', h, w;
+        pixels = pixels || this.pixels.list;
 
-    render(pixels) {
-        let line = '', h, w;
-        pixels = pixels || this.pixels;
+        trace.forEach((index) => {
+            pixels[index] = -1;
+        });
 
         for(h = 0; h < this._height; h+= 1) {
             console.log(line);
             line = '';
             for(w = 0; w < this._width; w++) {
-                line += pixels[this.indexOf(w, h)] >= 100 ? '*' : '-';
+                pixel = pixels[this.pixels.indexOf(w, h)];
+                line += pixel === -1 ? 't' : (pixel >= PIXEL_THRESHOLD ? '*' : '-');
             }
         }
     }

@@ -1,4 +1,4 @@
-const THRESHOLD = 100;
+import {PIXEL_THRESHOLD} from './config';
 
 export default class PlayGround {
     constructor(shape, image) {
@@ -21,7 +21,7 @@ export default class PlayGround {
         while(!item.done) {
             pixel = item.value;
 
-            if (pixel.value >= THRESHOLD) {
+            if (pixel.value >= PIXEL_THRESHOLD) {
                 if (!inRegion) {
                     inRegion = true;
 

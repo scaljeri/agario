@@ -20,7 +20,7 @@ let di = new DI();
 
 export default class Test {
     constructor(settings) {
-        di.register('$shape', Shape, ['$circleApprox', 'circleFactory', 'cellFactory', 'foodFactory', 'virusFactory', false], {singleton: true});
+        di.register('$shape', Shape, ['$traceedge', 'circleFactory', 'cellFactory', 'foodFactory', 'virusFactory', false], {singleton: true});
         di.register('$traceedge', TraceEdge, [[255, 0, 127]], {singleton: true});
         di.register('$circleApprox', CircleApprox, [[255, 0, 127]], {singleton: true});
         di.register('$cell', Cell);

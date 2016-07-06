@@ -1,80 +1,86 @@
 //import {PIXEL_THRESHOLD, MAX_TRACE_LENGTH} from './config';
+import BaseAnalyser from './base-analyser';
 
 const PIXEL_THRESHOLD = 200,
-    MAX_TRACE_LENGTH = 1000;
+    MAX_TRACE_LENGTH = 70,
+    MAX_STEP_DEPTH = 8,
+    EDGE_DISTANCE = 5;
 
-export default class TraceEdge {
+export default class TraceEdge extends BaseAnalyser {
     constructor(RGBA) {
-        console.log("OK");
-        console.log(RGBA);
-        this._RGBA = RGBA;
+        super(RGBA);
     }
 
-    setImage(image) {
-        this._image = image;
-        this._trace = [];
-
-        return this;
+    start(x, y) {
+        this.lookAround(x, y);
     }
 
-    get trace() {
-        return this._trace || [];
+    lookAround(x, y, isInside = true) {
+        this.moveHorizontal(x, y, -1, isInside);        // Move left
+
+        if (this._trace.length < MAX_TRACE_LENGTH) {
+            this.moveHorizontal(x, y, 1, isInside);     // Move right
+        }
+
+        if (this._trace.length < MAX_TRACE_LENGTH) {
+            let lastPixel = this._trace.slice(-1);
+            this.lookAround
+        }
     }
 
-    start(x, y, isInside = true) {
-        let w, h, px, py,  index;
+    getPixelIfInteresting(x, y, isInside) {
+        let pixel = this._image.get(x, y);
 
-        for (w = -1; w <= 1; w++) {
-            for (h = -1; h <= 1; h++) {
-                if (w === 0 && h !== 0) {
-                    px = x + w;
-                    py = y + h;
-                    index = this._image.indexOf(px, py);
+        if((isInside && pixel < PIXEL_THRESHOLD || !isInside && pixel >= PIXEL_THRESHOLD) &&
+            this.isWithinBounds(x, y)) {
+            return pixel;
+        }
+    }
 
-                    if (this.usePixel(px, py, index, !isInside)) {
-                        this._trace.push([x + w, y + h, index]);
+    moveHorizontal(x, y, dir, isInside) {
+        let pixel, nextX, nextY;
 
-                        if (this._trace.length === MAX_TRACE_LENGTH || this.start(x + w, y + h, !isInside)) {
-                            return true;
-                        }
-                    }
+        for (let step = 0; step < MAX_STEP_DEPTH; step++) {
+            x += dir;
+            pixel = this.getPixelIfInteresting(x, y, isInside);
+
+            if (pixel !== undefined && !this._image.getMetadata(x, y, 'trace')) {
+                [nextX, nextY] = this.moveVertical(x, y, -1, !isInside);
+
+                if (!nextX) {
+                    [nextX, nextY] = this.moveVertical(x, y, 1, !isInside);
+                }
+
+                if (nextX && this._trace.length < MAX_TRACE_LENGTH) {
+                    this._image.updateMetadata(nextX, nextY, 'trace', true);
+                    this._trace.push(this._image.indexOf(nextX, nextY));
+
+                    this.lookAround(nextX, nextY, isInside);
                 }
             }
         }
-
-        return false;
     }
 
-    usePixel(x, y, index, isInside) {
-        let isTraced = this._image.getMetadata(index, 'traced'),
-            pixelVal = this._image.pixels[index],
-            retVal = false;
+    moveVertical(x, y, dir, isInside) {
+        let pixel;
 
-        if (!isTraced && this.isOnTrack(x, y)) {                        // new pixel?
-            if (pixelVal < PIXEL_THRESHOLD) {   // outside pixel
-                if (isInside) {                 // is it needed?
-                    retVal = true;
-                }
-            } else if (!isInside) {             // inside pixel needed?
-                retVal = true;
+        for (let step = 0; step < MAX_STEP_DEPTH; step++) {
+            y += dir;
+            pixel = this._image.get(x, y);
+
+            // Need a pixel which is inside
+            if (this._image.getMetadata(x, y, 'trace')) {
+                return [];
+            } else if (this.getPixelIfInteresting(x, y, isInside)) {
+                return [x, y];
             }
         }
 
-        if (retVal) {
-            this._image.updateMetadataByIndex(index, 'traced', true);
-        }
-
-        return retVal;
+        return [];
     }
 
-    isOnTrach(x, y) {
-        // TODO: Check if tracing is still on the right track
-        // use this._trace + x and y
-        return true;
-    }
-    paintTrace(rgba) {
-        this._trace.forEach((index) => {
-            this._image.change(index, rgba || this._RGBA);
-        });
+    isWithinBounds(x, y) {
+        return x > EDGE_DISTANCE && x < this._image.width - EDGE_DISTANCE &&
+            y > EDGE_DISTANCE && y < this._image.height - EDGE_DISTANCE;
     }
 }
