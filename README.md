@@ -153,37 +153,27 @@ let okd =  window.onkeydown; window.onkeydown = (e) => {console.log('down:' + e.
 let oku =  window.onkeyup; window.onkeyup = (e) => { console.log('up:' + e.keyCode);oku({keyCode: e.keyCode === 32 ? 32 : 87});}
 
 ### agarly.com - Play it like a PRO
-Although agar.io is a great game, [agarly](http://agarly.com/2W41j) is a variant of this game with a lot of
+Although agar.io is a great game, [agarly](http://agarly.com) is a variant of this game with a lot of
 action and a lot more fun. It is a game where you have to be fast and trick your opponents all the time. 
 Maybe in the far future I'll write a bot for this game too, but until then you have to do it with human-play only.
-I've written a hack which enables you to shoot with any key (not **spacebar** of course). This way you can switch 
-faster between splitting and merging by shooting. Copy-past the code below into your browser's console 
+I've written a hack which enables you to shoot with any key (not **spacebar** of course). Also, if you hold down the key
+shooting/splitting will continue. This way you can split/merge extremely fast! Copy-past the code below into your browser's console 
 (tested in Chrome only) and you can play as a PRO!
 
     (function (w) {
-       let timer;
-       
+        let timer;
+
         function changeKeyListeneres() {
             let okd, oku, burst;
-            
+
             function onKeyDown(e) {
-                let count = 0;
-                
-                // Any key (except `w` and `space-bar`
-                if (!~[32, 87].indexOf(e.keyCode) && !burst) {
+                if (!burst) {
                     burst = setInterval(() => {
-                        count ++;
-                        if (count === 20) {
-                            clearInterval(burst);
-                            burst = null;
-                        }
-                        
-                        okd({keyCode: 87});
-                        oku({keyCode: 87});
-                    }, 20);
-                } else {
-                    okd({keyCode: e.keyCode === 32 ? 32 : 87});
+                        okd({keyCode: e.keyCode !== 32 ? 87 : 32});
+                        oku({keyCode: e.keyCode !== 32 ? 87 : 32});
+                    }, e.keyCode === 32 ? 90 : 50);
                 }
+                okd({keyCode: e.keyCode !== 32 ? 87 : 32});
             }
 
             if (w.onkeydown !== okd) {
@@ -192,9 +182,11 @@ faster between splitting and merging by shooting. Copy-past the code below into 
 
                 oku = w.onkeyup;
                 w.onkeyup = (e) => {
-                        oku({keyCode: e.keyCode === 32 ? 32 : 87});
-                }
-                
+                    clearInterval(burst);
+                    burst = null;
+                    oku({keyCode: e.keyCode === 32 ? 32 : 87});
+                };
+
                 clearInterval(timer);
                 console.log('Setup is ready, enjoy playing!!!');
             }
