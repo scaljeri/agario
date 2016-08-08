@@ -18,6 +18,25 @@ export default class ImageGen {
         return circle;
     }
 
+    getTop(index = 0) {
+        let v = this._circles[index];
+
+        return [v.center.x, v.center.y - v.r];
+    }
+
+    getBottom(index = 0) {
+        let v = this._circles[index];
+
+        return [v.center.x, v.center.y + v.r];
+    }
+
+    getOffTop(index = 0) {
+        let v = this._circles[index];
+
+        return [v.center.x, v.center.y - v.r];
+
+    }
+
     create() {
         let distance, value, pixel = new Victor(0,0),
             pixels = [];

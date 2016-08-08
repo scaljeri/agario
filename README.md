@@ -171,7 +171,7 @@ shooting/splitting will continue. This way you can split/merge extremely fast! C
                     burst = setInterval(() => {
                         okd({keyCode: e.keyCode !== 32 ? 87 : 32});
                         oku({keyCode: e.keyCode !== 32 ? 87 : 32});
-                    }, e.keyCode === 32 ? 90 : 50);
+                    }, e.keyCode === 32 ? 100 : 40);
                 }
                 okd({keyCode: e.keyCode !== 32 ? 87 : 32});
             }

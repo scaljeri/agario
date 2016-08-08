@@ -1,6 +1,6 @@
 export const PIXEL_THRESHOLD = 200;
 
-export const MAX_TRACE_LENGTH = 40;
+export const MAX_TRACE_LENGTH = 70;
 
 // The lookaround distance for tracers
 export const MAX_STEP_DEPTH = 2;
