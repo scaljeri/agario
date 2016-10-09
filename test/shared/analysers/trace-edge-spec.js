@@ -18,7 +18,7 @@ describe('TraceEdge:', () => {
     describe('Small circle', () => {
         beforeEach(() => {
             image = new ImageGen(100, 100);
-            circle = image.defineCircle();//100, 1000, 970);//500, 500, 200);
+            circle = image.defineCircle(/*default circle*/);
             traceEdge.set(image.create());
         });
 
@@ -28,24 +28,24 @@ describe('TraceEdge:', () => {
 
         describe('#star(top)', () => {
             beforeEach(() => {
-                console.log("=================================");
                 traceEdge.start(...image.getTop());
             });
 
             it(`should have traced from the top down`, () => {
                 image.render(null, traceEdge.trace);
-                traceEdge.trace.length.should.equals(MAX_TRACE_LENGTH);
+                traceEdge.trace.length.should.equals(40);
             });
         });
 
-        xdescribe('#star(bottom)', () => {
+        describe.only('#star(bottom)', () => {
             beforeEach(() => {
                 traceEdge.start(...image.getBottom());
             });
 
             it(`should have traced from the bottom up`, () => {
-                //image.render(null, traceEdge.trace);
-                traceEdge.trace.length.should.equals(MAX_TRACE_LENGTH);
+                console.log('dfqwfqwfqwf');
+                image.render(null, traceEdge.trace);
+                traceEdge.trace.length.should.equals(40);
             });
         });
     });
@@ -53,7 +53,7 @@ describe('TraceEdge:', () => {
     describe('Huge circle', () => {
         beforeEach(() => {
             image = new ImageGen(100, 100);
-            circle = image.defineCircle();//100, 1000, 970);//500, 500, 200);
+            circle = image.defineCircle(100, 1000, 970);//500, 500, 200);
             traceEdge.set(image.create());
         });
 
@@ -67,7 +67,7 @@ describe('TraceEdge:', () => {
                 traceEdge.start(...image.getTop());
             });
 
-            it(`should have traced from the top down`, () => {
+            it.only(`should have traced from the top down`, () => {
                 image.render(null, traceEdge.trace);
                 traceEdge.trace.length.should.equals(MAX_TRACE_LENGTH);
             });

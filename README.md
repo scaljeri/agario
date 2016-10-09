@@ -162,6 +162,37 @@ shooting/splitting will continue. This way you can split/merge extremely fast! C
 
     (function (w) {
         let timer;
+        
+        function isVisible(elm) {
+          if(!elm.offsetHeight && !elm.offsetWidth) { return false; }
+          if(getComputedStyle(elm).visibility === 'hidden') { return false; }
+          return true;
+        }
+        
+        document.getElementById('nick').value = 'tEaM eXtreMe';
+        
+        function fireEvent(node, eventName) {
+            let doc = node.ownerDocument,
+                event = doc.createEvent('MouseEvents');
+                
+            event.initEvent(eventName, true, true); 
+            event.synthetic = true; 
+            node.dispatchEvent(event, true);
+        };
+        
+        let start = document.getElementById('PlayImage'),
+            playAgain = document.getElementById('statsContinue');
+        
+        setInterval(() => {
+           if (isVisible(start)) {
+               fireEvent(start, 'click'); 
+           }
+           
+           if (isVisible(playAgain)) {
+               fireEvent(playAgain, 'click');
+               fireEvent(start, 'click'); 
+           }
+        }, 1000);
 
         function changeKeyListeneres() {
             let okd, oku, burst;
@@ -199,6 +230,10 @@ shooting/splitting will continue. This way you can split/merge extremely fast! C
         }, 500);
     })(window);
 
+Minified:
+
+    (function(w){let timer;function isVisible(elm){if(!elm.offsetHeight&&!elm.offsetWidth){return false}if(getComputedStyle(elm).visibility==='hidden'){return false}return true}document.getElementById('nick').value='tEaM eXtreMe';function fireEvent(node,eventName){let doc=node.ownerDocument,event=doc.createEvent('MouseEvents');event.initEvent(eventName,true,true);event.synthetic=true;node.dispatchEvent(event,true)};let start=document.getElementById('PlayImage'),playAgain=document.getElementById('statsContinue');setInterval(()=>{if(isVisible(start)){fireEvent(start,'click')}if(isVisible(playAgain)){fireEvent(playAgain,'click');fireEvent(start,'click')}},1000);function changeKeyListeneres(){let okd,oku,burst;function onKeyDown(e){if(!burst){burst=setInterval(()=>{okd({keyCode:e.keyCode!==32?87:32});oku({keyCode:e.keyCode!==32?87:32})},e.keyCode===32?100:40)}okd({keyCode:e.keyCode!==32?87:32})}if(w.onkeydown!==okd){okd=w.onkeydown;w.onkeydown=onKeyDown;oku=w.onkeyup;w.onkeyup=(e)=>{clearInterval(burst);burst=null;oku({keyCode:e.keyCode===32?32:87})};clearInterval(timer);console.log('Setup is ready, enjoy playing!!!')}}timer=setInterval(()=>{if(window.onkeydown){changeKeyListeneres()}},500)})(window);
+    
 NOTE: You have to run this code as soon as possible when the intro-spinner is gone. Wait until you see the message 
 that it is ready before you begin!
 
