@@ -242,6 +242,6 @@ shooting/splitting will continue. This way you can split/merge extremely fast! C
     (function(a){function b(i){return(i.offsetHeight||i.offsetWidth)&&'hidden'!==getComputedStyle(i).visibility}function c(i,j){var k=i.ownerDocument,l=k.createEvent('MouseEvents');l.initEvent(j,!0,!0),l.synthetic=!0,i.dispatchEvent(l,!0)}function d(){function i(m){l||(l=setInterval(function(){j({keyCode:32===m.keyCode?32:87}),k({keyCode:32===m.keyCode?32:87})},32===m.keyCode?100:40)),j({keyCode:32===m.keyCode?32:87})}var j=void 0,k=void 0,l=void 0;a.onkeydown!==j&&(j=a.onkeydown,a.onkeydown=i,k=a.onkeyup,a.onkeyup=function(m){clearInterval(l),l=null,k({keyCode:32===m.keyCode?32:87})},clearInterval(f),console.log('Setup is ready, enjoy playing!!!'))}var f=void 0;document.getElementById('nick').value='tEaM eXtreMe';;var g=document.getElementById('PlayImage'),h=document.getElementById('statsContinue');setInterval(function(){b(g)&&c(g,'click'),b(h)&&(c(h,'click'),c(g,'click'))},1000),f=setInterval(function(){window.onkeydown&&d()},500),document.addEventListener('mouseup',function(i){i.stopImmediatePropagation(),i.stopPropagation(),i.preventDefault()})})(window);
     
 NOTE: You have to run this code as soon as possible when the intro-spinner is gone. Wait until you see the message 
-that it is ready before you begin!
+that it is ready before you begin!. You can find me in this room: [http://agarly.com/k2ByX](http://agarly.com/k2ByX)
 
 IMPORTANT: If you see a cell with the name `TeAm XtreMe` it most likely will be me - please don't eat me!!!
