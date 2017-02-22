@@ -257,5 +257,5 @@ shooting/splitting will continue. This way you can split/merge extremely fast! C
     
 IMPORTANT: If you see a cell with the name `teAm eXtreMe++` it most likely will be me - please don't eat me!!!
 
-You can find me in this room: [http://agarly.com/k2ByX](http://agarly.com/k2ByX or you can goto http://agarly.com and 
+You can find me in this room: [http://agarly.com/k2ByX](http://agarly.com/k2ByX) or you can goto [http://agarly.com](http://agarly.com) and 
 checkout the room first. If it turns out it is not a vary active one, hit reload and you will most likely get in an other room!
